@@ -12,6 +12,30 @@ interface BannerSliderProps {
 export default function BannerSlider({ banners }: BannerSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Injeta o CSS da animação de zoom (deve estar antes de qualquer return condicional)
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes bannerZoom {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.15);
+        }
+      }
+      .banner-zoom-active {
+        animation: bannerZoom 20s ease-in-out infinite alternate;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      if (document.head.contains(style)) {
+        document.head.removeChild(style);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (banners.length === 0) return;
 
@@ -46,28 +70,6 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
   };
 
   const currentBanner = banners[currentIndex];
-
-  useEffect(() => {
-    // Injeta o CSS da animação de zoom
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes bannerZoom {
-        0% {
-          transform: scale(1);
-        }
-        100% {
-          transform: scale(1.15);
-        }
-      }
-      .banner-zoom-active {
-        animation: bannerZoom 20s ease-in-out infinite alternate;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => {
-      document.head.removeChild(style);
-    };
-  }, []);
 
   return (
     <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[55vh] min-h-[300px] overflow-hidden">
