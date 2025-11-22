@@ -87,6 +87,7 @@ export interface SiteSettings {
   site_description?: string;
   contact_email?: string;
   logo_url?: string;
+  logo_white_url?: string;
   updated_at: string;
 }
 

@@ -7,6 +7,7 @@ import { Facebook, Instagram, Linkedin, Twitter, Mail, Phone, MapPin } from "luc
 
 export default function Footer() {
   const [footerSettings, setFooterSettings] = useState<any>(null);
+  const [siteSettings, setSiteSettings] = useState<any>(null);
   const [links, setLinks] = useState<{ label: string; url: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,14 +15,18 @@ export default function Footer() {
     async function loadFooterSettings() {
       try {
         const supabase = createClient();
-        const { data } = await supabase
-          .from("footer_settings")
-          .select("*")
-          .single();
+        const [footerData, siteData] = await Promise.all([
+          supabase.from("footer_settings").select("*").single(),
+          supabase.from("site_settings").select("logo_white_url, site_name").single(),
+        ]);
         
-        if (data) {
-          setFooterSettings(data);
-          setLinks(data.links ? JSON.parse(data.links) : []);
+        if (footerData.data) {
+          setFooterSettings(footerData.data);
+          setLinks(footerData.data.links ? JSON.parse(footerData.data.links) : []);
+        }
+        
+        if (siteData.data) {
+          setSiteSettings(siteData.data);
         }
       } catch (error) {
         console.warn("Não foi possível carregar configurações do rodapé:", error);
@@ -38,7 +43,33 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           <div>
-            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">ABCIP</h3>
+            <Link href="/" className="inline-block mb-3 sm:mb-4">
+              {siteSettings?.logo_white_url ? (
+                <div className="relative h-10 sm:h-12 w-auto">
+                  <img
+                    src={siteSettings.logo_white_url}
+                    alt={siteSettings.site_name || "ABCIP"}
+                    className="h-full w-auto object-contain"
+                    style={{ maxWidth: "200px" }}
+                    onError={(e) => {
+                      // Se o logo falhar ao carregar, mostra o texto
+                      e.currentTarget.style.display = "none";
+                      const parent = e.currentTarget.parentElement;
+                      if (parent) {
+                        const fallback = document.createElement("span");
+                        fallback.className = "text-xl sm:text-2xl font-bold text-white";
+                        fallback.textContent = siteSettings?.site_name || "ABCIP";
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                <h3 className="text-xl sm:text-2xl font-bold text-white">
+                  {siteSettings?.site_name || "ABCIP"}
+                </h3>
+              )}
+            </Link>
             <p className="text-sm sm:text-base text-gray-400">
               Concessionária de Iluminação Pública
             </p>

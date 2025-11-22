@@ -8,11 +8,13 @@ import { createClient } from "@/lib/supabase/client";
 
 interface HeaderProps {
   logoUrl?: string | null;
+  logoWhiteUrl?: string | null;
   siteName?: string;
 }
 
-export default function Header({ logoUrl: initialLogoUrl, siteName: initialSiteName }: HeaderProps) {
+export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialLogoWhiteUrl, siteName: initialSiteName }: HeaderProps) {
   const [logoUrl, setLogoUrl] = useState<string | null>(initialLogoUrl || null);
+  const [logoWhiteUrl, setLogoWhiteUrl] = useState<string | null>(initialLogoWhiteUrl || null);
   const [siteName, setSiteName] = useState<string>(initialSiteName || "ABCIP");
 
   // Se não recebeu logoUrl como prop, busca no cliente
@@ -23,11 +25,12 @@ export default function Header({ logoUrl: initialLogoUrl, siteName: initialSiteN
           const supabase = createClient();
           const { data: siteSettings } = await supabase
             .from("site_settings")
-            .select("logo_url, site_name")
+            .select("logo_url, logo_white_url, site_name")
             .single();
 
           if (siteSettings) {
             setLogoUrl(siteSettings.logo_url || null);
+            setLogoWhiteUrl(siteSettings.logo_white_url || null);
             setSiteName(siteSettings.site_name || "ABCIP");
           }
         } catch (error) {

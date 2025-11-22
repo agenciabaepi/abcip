@@ -53,25 +53,25 @@ export default async function AdminDashboard() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Dashboard</h1>
+    <div className="max-w-7xl mx-auto">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <Link
               key={stat.title}
               href={stat.href}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition"
+              className="bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-600 text-sm mb-1">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900">{stat.count}</p>
+                  <p className="text-gray-600 text-xs sm:text-sm mb-1">{stat.title}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stat.count}</p>
                 </div>
-                <div className={`${stat.color} p-3 rounded-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
+                <div className={`${stat.color} p-2 sm:p-3 rounded-lg`}>
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
               </div>
             </Link>

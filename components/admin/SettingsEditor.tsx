@@ -24,7 +24,11 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
   const [logoUrl, setLogoUrl] = useState<string | null>(
     siteSettings?.logo_url || null
   );
+  const [logoWhiteUrl, setLogoWhiteUrl] = useState<string | null>(
+    siteSettings?.logo_white_url || null
+  );
   const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingWhite, setIsUploadingWhite] = useState(false);
 
   const {
     register,
@@ -103,6 +107,71 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
     toast.success("Logo removido. Selecione uma nova imagem.");
   };
 
+  const handleLogoWhiteUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validação de tipo de arquivo
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg+xml"];
+    if (!validTypes.includes(file.type)) {
+      toast.error("Por favor, selecione uma imagem válida (JPG, PNG, WEBP ou SVG).");
+      return;
+    }
+
+    // Validação de tamanho (máximo 2MB para logo)
+    const maxSize = 2 * 1024 * 1024; // 2MB em bytes
+    if (file.size > maxSize) {
+      toast.error("O logo deve ter no máximo 2MB. Por favor, comprima a imagem e tente novamente.");
+      return;
+    }
+
+    setIsUploadingWhite(true);
+    try {
+      // Remove logo branco antigo se existir
+      if (logoWhiteUrl) {
+        try {
+          const oldPath = logoWhiteUrl.split("/").slice(-2).join("/");
+          await supabase.storage.from("uploads").remove([oldPath]);
+        } catch (error) {
+          console.warn("Erro ao remover logo branco antigo:", error);
+        }
+      }
+
+      const fileExt = file.name.split(".").pop()?.toLowerCase();
+      const fileName = `logo-white-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `logos/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("uploads")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("uploads").getPublicUrl(filePath);
+
+      setLogoWhiteUrl(publicUrl);
+      toast.success("Logo branco enviado com sucesso!");
+    } catch (error: any) {
+      console.error("Error uploading white logo:", error);
+      toast.error(error.message || "Erro ao enviar logo branco. Tente novamente.");
+    } finally {
+      setIsUploadingWhite(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleRemoveLogoWhite = () => {
+    setLogoWhiteUrl(null);
+    toast.success("Logo branco removido. Selecione uma nova imagem.");
+  };
+
   const onSubmit = async (data: SettingsForm) => {
     setIsSaving(true);
     try {
@@ -111,6 +180,7 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
         site_description: data.site_description || null,
         contact_email: data.contact_email || null,
         logo_url: logoUrl || null,
+        logo_white_url: logoWhiteUrl || null,
         updated_at: new Date().toISOString(),
       };
 
@@ -184,6 +254,52 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
           </div>
           <p className="text-xs text-gray-500 mt-1">
             Formatos aceitos: JPG, PNG, WEBP, SVG. Tamanho máximo: 2MB. Recomendado: fundo transparente (PNG/SVG)
+          </p>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Logo Branco (para fundos escuros)
+          </label>
+          {logoWhiteUrl && (
+            <div className="relative w-full max-w-xs h-32 mb-4 rounded-lg overflow-hidden border border-gray-300 bg-gray-900 flex items-center justify-center">
+              <img 
+                src={logoWhiteUrl} 
+                alt="Logo Branco" 
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  console.error("Error loading white logo:", logoWhiteUrl);
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleRemoveLogoWhite}
+                className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition text-sm font-semibold"
+              >
+                Remover
+              </button>
+            </div>
+          )}
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml"
+              onChange={handleLogoWhiteUpload}
+              disabled={isUploadingWhite}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            {isUploadingWhite && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                <div className="text-center">
+                  <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500 mb-2"></div>
+                  <p className="text-sm text-gray-700 font-medium">Enviando logo branco...</p>
+                </div>
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Logo branco para usar em fundos escuros. Formatos aceitos: JPG, PNG, WEBP, SVG. Tamanho máximo: 2MB.
           </p>
         </div>
 
