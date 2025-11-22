@@ -35,8 +35,18 @@ export default function LoginPage() {
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
       const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
       
+      console.log("Environment check:", {
+        hasUrl: !!supabaseUrl,
+        hasKey: !!supabaseKey,
+        urlPreview: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : "missing",
+      });
+      
       if (!supabaseUrl || !supabaseKey) {
-        throw new Error("Configuração do Supabase não encontrada. Verifique as variáveis de ambiente.");
+        throw new Error("Configuração do Supabase não encontrada. Verifique as variáveis de ambiente na Vercel.");
+      }
+      
+      if (supabaseUrl.includes("seu-projeto") || supabaseKey.includes("your-anon-key")) {
+        throw new Error("Variáveis de ambiente não configuradas corretamente. Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY na Vercel.");
       }
       
       // Faz login no cliente primeiro

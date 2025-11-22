@@ -9,9 +9,16 @@ export function createClient() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
-    throw new Error(
-      "Missing Supabase environment variables. Please create a .env.local file with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY"
-    );
+    const errorMsg = "Missing Supabase environment variables. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel settings.";
+    console.error(errorMsg, { url: !!url, key: !!key });
+    throw new Error(errorMsg);
+  }
+
+  // Valida se a URL e a key não são valores padrão/placeholder
+  if (url.includes("seu-projeto") || url.includes("your-project") || key.includes("your-anon-key")) {
+    const errorMsg = "Supabase environment variables are not properly configured. Please set the correct values in Vercel settings.";
+    console.error(errorMsg);
+    throw new Error(errorMsg);
   }
 
   // Cria uma instância única do cliente para manter a sessão
