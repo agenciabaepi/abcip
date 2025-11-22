@@ -6,17 +6,25 @@ import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 
 export default async function QuemSomosPage() {
-  const supabase = await createClient();
-  
-  const [aboutPageResult, teamResult, boardResult] = await Promise.all([
-    supabase.from("about_page").select("*").single(),
-    supabase.from("team_members").select("*").order("order", { ascending: true }),
-    supabase.from("board_members").select("*").order("order", { ascending: true }),
-  ]);
+  let aboutPage: any = null;
+  let teamMembers: any[] = [];
+  let boardMembers: any[] = [];
 
-  const aboutPage = aboutPageResult.data;
-  const teamMembers = teamResult.data || [];
-  const boardMembers = boardResult.data || [];
+  try {
+    const supabase = await createClient();
+    
+    const [aboutPageResult, teamResult, boardResult] = await Promise.all([
+      supabase.from("about_page").select("*").single(),
+      supabase.from("team_members").select("*").order("order", { ascending: true }),
+      supabase.from("board_members").select("*").order("order", { ascending: true }),
+    ]);
+
+    aboutPage = aboutPageResult.data;
+    teamMembers = teamResult.data || [];
+    boardMembers = boardResult.data || [];
+  } catch (error) {
+    console.warn("Não foi possível carregar dados do Supabase:", error);
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

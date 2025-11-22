@@ -5,11 +5,19 @@ import { Associate } from "@/lib/types";
 import Image from "next/image";
 
 export default async function AssociadosPage() {
-  const supabase = await createClient();
-  const { data: associates } = await supabase
-    .from("associates")
-    .select("*")
-    .order("name", { ascending: true });
+  let associates: Associate[] = [];
+
+  try {
+    const supabase = await createClient();
+    const { data: associatesData } = await supabase
+      .from("associates")
+      .select("*")
+      .order("name", { ascending: true });
+    
+    associates = (associatesData as Associate[]) || [];
+  } catch (error) {
+    console.warn("Não foi possível carregar associados:", error);
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -22,7 +30,7 @@ export default async function AssociadosPage() {
 
           {associates && associates.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-              {(associates as Associate[]).map((associate) => (
+              {associates.map((associate) => (
                 <div
                   key={associate.id}
                   className="bg-white p-4 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 flex flex-col items-center justify-center"

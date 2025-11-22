@@ -14,20 +14,30 @@ export default async function NoticiasPage({
 }: {
   searchParams: SearchParams;
 }) {
-  const supabase = await createClient();
+  let posts: Post[] = [];
+  let totalPages = 1;
+
+  try {
+    const supabase = await createClient();
+    const page = parseInt(searchParams.page || "1");
+    const postsPerPage = 9;
+    const from = (page - 1) * postsPerPage;
+    const to = from + postsPerPage - 1;
+
+    const { data: postsData, count } = await supabase
+      .from("posts")
+      .select("*", { count: "exact" })
+      .eq("published", true)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+
+    posts = (postsData as Post[]) || [];
+    totalPages = Math.ceil((count || 0) / postsPerPage);
+  } catch (error) {
+    console.warn("Não foi possível carregar notícias:", error);
+  }
+
   const page = parseInt(searchParams.page || "1");
-  const postsPerPage = 9;
-  const from = (page - 1) * postsPerPage;
-  const to = from + postsPerPage - 1;
-
-  const { data: posts, count } = await supabase
-    .from("posts")
-    .select("*", { count: "exact" })
-    .eq("published", true)
-    .order("created_at", { ascending: false })
-    .range(from, to);
-
-  const totalPages = Math.ceil((count || 0) / postsPerPage);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -41,7 +51,7 @@ export default async function NoticiasPage({
           {posts && posts.length > 0 ? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                {(posts as Post[]).map((post) => (
+                {posts.map((post) => (
                   <PostCard key={post.id} post={post} />
                 ))}
               </div>
