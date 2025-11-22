@@ -22,7 +22,7 @@ export default function BoardMemberProfile({ member, index }: BoardMemberProfile
         <div className={`w-full md:w-2/5 ${isEven ? "md:order-1" : "md:order-2"}`}>
           <div className="relative w-full max-w-xs mx-auto md:mx-0">
             <div className="relative aspect-[3/4] w-full">
-              {hasPhoto ? (
+              {hasPhoto && member.photo_url ? (
                 <Image
                   src={member.photo_url}
                   alt={member.name}
