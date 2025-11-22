@@ -1,0 +1,55 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
+
+interface DeleteBoardMemberButtonProps {
+  memberId: string;
+}
+
+export default function DeleteBoardMemberButton({
+  memberId,
+}: DeleteBoardMemberButtonProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
+
+  const handleDelete = async () => {
+    if (!confirm("Tem certeza que deseja excluir este membro da diretoria?")) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const { error } = await supabase
+        .from("board_members")
+        .delete()
+        .eq("id", memberId);
+
+      if (error) throw error;
+
+      toast.success("Membro da diretoria excluído com sucesso!");
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting board member:", error);
+      toast.error("Erro ao excluir membro da diretoria.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      disabled={isDeleting}
+      className="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition disabled:opacity-50 text-sm flex items-center space-x-1"
+    >
+      <Trash2 className="w-4 h-4" />
+      <span>Excluir</span>
+    </button>
+  );
+}
+
