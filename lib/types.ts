@@ -99,3 +99,27 @@ export interface ContactMessage {
   created_at: string;
 }
 
+export interface CTASection {
+  id: string;
+  title: string;
+  description: string;
+  button_text: string;
+  button_link?: string;
+  image_url?: string;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Video {
+  id: string;
+  title: string;
+  description?: string;
+  youtube_url: string;
+  thumbnail_url?: string;
+  order_index: number;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+

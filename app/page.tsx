@@ -2,13 +2,17 @@ import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
 import BannerSlider from "@/components/BannerSlider";
 import PostCard from "@/components/PostCard";
+import CTASection from "@/components/CTASection";
+import VideoSection from "@/components/VideoSection";
 import { createClient } from "@/lib/supabase/server";
-import { Banner, Post } from "@/lib/types";
+import { Banner, Post, CTASection as CTASectionType, Video } from "@/lib/types";
 import Link from "next/link";
 
 export default async function Home() {
   let banners: Banner[] = [];
   let posts: Post[] = [];
+  let cta: CTASectionType | null = null;
+  let videos: Video[] = [];
 
   try {
     const supabase = await createClient();
@@ -24,8 +28,33 @@ export default async function Home() {
       .order("created_at", { ascending: false })
       .limit(6);
 
+    const { data: ctaData, error: ctaError } = await supabase
+      .from("cta_section")
+      .select("*")
+      .eq("active", true)
+      .limit(1);
+
+    const { data: videosData } = await supabase
+      .from("videos")
+      .select("*")
+      .eq("active", true)
+      .order("order_index", { ascending: true });
+
     banners = (bannersData as Banner[]) || [];
     posts = (postsData as Post[]) || [];
+    cta = (ctaData && ctaData.length > 0 ? (ctaData[0] as CTASectionType) : null);
+    videos = (videosData as Video[]) || [];
+    
+    // Debug: verificar se a CTA foi carregada
+    if (cta) {
+      console.log("CTA carregada com sucesso:", { id: cta.id, title: cta.title, active: cta.active });
+    } else {
+      console.log("Nenhuma CTA ativa encontrada. Verifique se há uma CTA marcada como ativa no banco de dados.");
+    }
+    
+    if (ctaError) {
+      console.warn("Erro ao carregar CTA:", ctaError);
+    }
   } catch (error) {
     console.warn("Não foi possível carregar dados do Supabase:", error);
   }
@@ -68,6 +97,12 @@ export default async function Home() {
             </div>
           </section>
         )}
+
+        {/* Seção CTA - Call to Action (logo após Últimas Notícias) */}
+        {cta && <CTASection cta={cta} />}
+
+        {/* Seção de Vídeos */}
+        {videos && videos.length > 0 && <VideoSection videos={videos} />}
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
           <div className="text-center mb-8 md:mb-12 lg:mb-16">

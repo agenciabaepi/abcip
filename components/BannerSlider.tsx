@@ -47,6 +47,28 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
 
   const currentBanner = banners[currentIndex];
 
+  useEffect(() => {
+    // Injeta o CSS da animação de zoom
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes bannerZoom {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.15);
+        }
+      }
+      .banner-zoom-active {
+        animation: bannerZoom 20s ease-in-out infinite alternate;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
     <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[55vh] min-h-[300px] overflow-hidden">
       {banners.map((banner, index) => (
@@ -56,29 +78,45 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}
         >
-          <Image
-            src={banner.image_url}
-            alt={banner.title || "Banner"}
-            fill
-            className="object-cover"
-            priority={index === 0}
-          />
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div className="text-center text-white px-4 sm:px-6 max-w-3xl">
+          {/* Imagem com efeito de zoom suave */}
+          <div 
+            className={`absolute inset-0 ${
+              index === currentIndex ? "banner-zoom-active" : ""
+            }`}
+          >
+            <Image
+              src={banner.image_url}
+              alt={banner.title || "Banner"}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+          </div>
+          
+          {/* Overlay gradiente escuro */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/30 to-transparent" />
+          
+          {/* Conteúdo no canto inferior esquerdo */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10 lg:p-12">
+            <div className="max-w-4xl">
               {banner.title && (
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 tracking-tight">
-                  {banner.title}
-                </h1>
+                <div className="relative inline-block">
+                  {/* Shape decorativo embaixo do título */}
+                  <div className="absolute -bottom-2 left-0 right-0 h-2 bg-[#5FE074] rounded-sm transform -skew-x-12" />
+                  <h1 className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 sm:mb-4 tracking-tight drop-shadow-lg">
+                    {banner.title}
+                  </h1>
+                </div>
               )}
               {banner.subtitle && (
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl lg:text-2xl text-gray-200">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 mt-4 sm:mt-6 max-w-2xl drop-shadow-md">
                   {banner.subtitle}
                 </p>
               )}
               {banner.link && (
                 <a
                   href={banner.link}
-                  className="inline-block mt-4 sm:mt-6 px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-primary-500 text-dark-900 rounded-lg hover:bg-primary-400 transition font-semibold"
+                  className="inline-block mt-4 sm:mt-6 px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base bg-[#5FE074] text-[#031C30] rounded-lg hover:bg-[#4fd064] transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:scale-105 transform"
                 >
                   Saiba Mais
                 </a>

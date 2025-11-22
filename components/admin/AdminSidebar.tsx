@@ -12,6 +12,8 @@ import {
   Info,
   MessageSquare,
   LogOut,
+  Megaphone,
+  Video,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -33,6 +35,8 @@ export default function AdminSidebar() {
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/posts", label: "Notícias", icon: FileText },
     { href: "/admin/banners", label: "Banners", icon: Image },
+    { href: "/admin/cta", label: "CTA Homepage", icon: Megaphone },
+    { href: "/admin/videos", label: "Vídeos", icon: Video },
     { href: "/admin/associates", label: "Associados", icon: Users },
     { href: "/admin/about", label: "Quem Somos", icon: Info },
     { href: "/admin/board", label: "Diretoria", icon: Users },
