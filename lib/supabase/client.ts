@@ -9,14 +9,25 @@ export function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  // Debug: log das variáveis (sem expor valores completos)
+  if (typeof window !== "undefined") {
+    console.log("[Supabase Client] Environment check:", {
+      hasUrl: !!url,
+      hasKey: !!key,
+      urlLength: url?.length || 0,
+      keyLength: key?.length || 0,
+      urlStart: url ? url.substring(0, 20) : "missing",
+      keyStart: key ? key.substring(0, 20) : "missing",
+    });
+  }
+
   // Validação rigorosa das variáveis
   if (!url || !key) {
-    const errorMsg = "Missing Supabase environment variables. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel settings.";
+    const errorMsg = "❌ Variáveis de ambiente do Supabase não encontradas. Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY na Vercel e faça um redeploy.";
     console.error(errorMsg, { 
       hasUrl: !!url, 
       hasKey: !!key,
-      urlValue: url ? `${url.substring(0, 30)}...` : "undefined",
-      keyValue: key ? `${key.substring(0, 30)}...` : "undefined"
+      allEnvKeys: typeof window !== "undefined" ? Object.keys(process.env).filter(k => k.startsWith("NEXT_PUBLIC_")) : []
     });
     throw new Error(errorMsg);
   }
