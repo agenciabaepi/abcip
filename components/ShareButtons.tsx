@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Facebook, Twitter, Linkedin, Link as LinkIcon, Whatsapp } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Link as LinkIcon, MessageCircle } from "lucide-react";
 
 interface ShareButtonsProps {
   url: string;
@@ -95,7 +95,7 @@ export default function ShareButtons({ url, title, description, postId, onShare 
           className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 text-white hover:bg-green-600 transition"
           aria-label="Compartilhar no WhatsApp"
         >
-          <Whatsapp className="w-5 h-5" />
+          <MessageCircle className="w-5 h-5" />
         </a>
         <button
           onClick={copyToClipboard}
