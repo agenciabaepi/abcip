@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useForm } from "react-hook-form";
@@ -13,7 +13,35 @@ interface LoginForm {
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [envCheck, setEnvCheck] = useState<{ hasUrl: boolean; hasKey: boolean } | null>(null);
   const router = useRouter();
+
+  // Verifica variáveis de ambiente no mount
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    setEnvCheck({
+      hasUrl: !!url,
+      hasKey: !!key,
+    });
+
+    if (!url || !key) {
+      console.error("❌ Variáveis de ambiente não encontradas:", {
+        url: url ? "✅" : "❌",
+        key: key ? "✅" : "❌",
+        allPublicVars: Object.keys(process.env).filter(k => k.startsWith("NEXT_PUBLIC_"))
+      });
+      toast.error("Configuração do Supabase não encontrada. Verifique as variáveis na Vercel e faça um redeploy.", {
+        duration: 10000,
+      });
+    } else {
+      console.log("✅ Variáveis de ambiente encontradas:", {
+        url: url.substring(0, 30) + "...",
+        keyLength: key.length,
+      });
+    }
+  }, []);
   const {
     register,
     handleSubmit,
@@ -135,6 +163,17 @@ export default function LoginPage() {
         <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
           Painel Administrativo
         </h1>
+        {envCheck && (!envCheck.hasUrl || !envCheck.hasKey) && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-sm text-red-800 font-semibold mb-2">
+              ⚠️ Variáveis de ambiente não configuradas
+            </p>
+            <p className="text-xs text-red-700">
+              Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY na Vercel e faça um redeploy.
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label
