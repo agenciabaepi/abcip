@@ -281,7 +281,7 @@ export default function PostEditor({ post }: PostEditorProps) {
                     <li><code>&lt;em&gt;</code> ou <code>&lt;i&gt;</code> para itálico</li>
                     <li><code>&lt;br&gt;</code> para quebra de linha</li>
                     <li><code>&lt;ul&gt;</code> e <code>&lt;li&gt;</code> para listas</li>
-                    <li><code>&lt;a href="url"&gt;</code> para links</li>
+                    <li><code>&lt;a href=&quot;url&quot;&gt;</code> para links</li>
                   </ul>
                 </div>
               </div>

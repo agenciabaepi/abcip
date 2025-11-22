@@ -156,7 +156,7 @@ export default function AboutEditor({ aboutPage }: AboutEditorProps) {
             <p className="text-sm text-gray-500 mt-1">Enviando banner...</p>
           )}
           <p className="text-xs text-gray-500 mt-1">
-            Imagem que aparece no topo da página "Quem Somos"
+            Imagem que aparece no topo da página &quot;Quem Somos&quot;
           </p>
         </div>
 
