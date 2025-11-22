@@ -29,63 +29,80 @@ export default function LoginPage() {
   const onSubmit = async (formData: LoginForm) => {
     setIsLoading(true);
     try {
+      console.log("Attempting login with email:", formData.email);
+      
+      // Verifica se as variáveis de ambiente estão disponíveis no cliente
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error("Configuração do Supabase não encontrada. Verifique as variáveis de ambiente.");
+      }
+      
       // Faz login no cliente primeiro
       const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
 
-      if (error) throw error;
-
-      if (authData.user && authData.session) {
-        console.log("Login successful, session:", authData.session);
-        
-        // Sincroniza a sessão com o servidor via API route
-        const response = await fetch("/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Importante: inclui cookies na requisição
-          body: JSON.stringify({
-            access_token: authData.session.access_token,
-            refresh_token: authData.session.refresh_token,
-          }),
-        });
-
-        console.log("API response status:", response.status, response.statusText);
-
-        if (!response.ok) {
-          // Tenta ler o texto da resposta para ver o erro
-          const text = await response.text();
-          console.error("API error response:", text);
-          let errorMessage = "Erro ao sincronizar sessão";
-          try {
-            const json = JSON.parse(text);
-            errorMessage = json.error || errorMessage;
-          } catch {
-            errorMessage = text || errorMessage;
-          }
-          throw new Error(errorMessage);
-        }
-
-        const result = await response.json();
-        console.log("API response:", result);
-
-        toast.success("Login realizado com sucesso!");
-        
-        // Aguarda um pouco para garantir que os cookies sejam processados
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Força um refresh completo da página
-        window.location.href = "/admin";
-      } else {
-        toast.error("Erro ao fazer login. Sessão não criada.");
-        setIsLoading(false);
+      if (error) {
+        console.error("Supabase auth error:", error);
+        throw error;
       }
+
+      if (!authData.user || !authData.session) {
+        throw new Error("Sessão não criada após login");
+      }
+
+      console.log("Login successful, session:", authData.session);
+      
+      // Sincroniza a sessão com o servidor via API route
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Importante: inclui cookies na requisição
+        body: JSON.stringify({
+          access_token: authData.session.access_token,
+          refresh_token: authData.session.refresh_token,
+        }),
+      });
+
+      console.log("API response status:", response.status, response.statusText);
+
+      if (!response.ok) {
+        // Tenta ler o texto da resposta para ver o erro
+        const text = await response.text();
+        console.error("API error response:", text);
+        let errorMessage = "Erro ao sincronizar sessão";
+        try {
+          const json = JSON.parse(text);
+          errorMessage = json.error || errorMessage;
+        } catch {
+          errorMessage = text || errorMessage;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const result = await response.json();
+      console.log("API response:", result);
+
+      if (!result.success) {
+        throw new Error(result.error || "Falha ao sincronizar sessão");
+      }
+
+      toast.success("Login realizado com sucesso!");
+      
+      // Aguarda um pouco para garantir que os cookies sejam processados
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Força um refresh completo da página
+      window.location.href = "/admin";
     } catch (error: any) {
       console.error("Login error:", error);
-      toast.error(error.message || "Erro ao fazer login. Verifique suas credenciais.");
+      const errorMessage = error.message || "Erro ao fazer login. Verifique suas credenciais.";
+      toast.error(errorMessage);
       setIsLoading(false);
     }
   };

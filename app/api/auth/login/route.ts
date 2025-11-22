@@ -9,6 +9,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Tokens missing" }, { status: 400 });
     }
     
+    // Verifica se as variáveis de ambiente estão configuradas
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!url || !key) {
+      console.error("Missing Supabase environment variables");
+      return NextResponse.json({ 
+        error: "Configuração do servidor incompleta. Verifique as variáveis de ambiente." 
+      }, { status: 500 });
+    }
+    
     const supabase = await createClient();
     
     console.log("Setting session with tokens...");
@@ -21,7 +32,9 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("setSession error:", error);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      return NextResponse.json({ 
+        error: error.message || "Erro ao sincronizar sessão" 
+      }, { status: 400 });
     }
 
     console.log("Session set successfully, user:", data?.user?.email);
@@ -41,7 +54,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Session sync failed" }, { status: 400 });
   } catch (error: any) {
     console.error("API error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ 
+      error: error.message || "Erro interno do servidor" 
+    }, { status: 500 });
   }
 }
 
