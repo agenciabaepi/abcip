@@ -14,7 +14,6 @@ interface LoginForm {
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
   const {
     register,
     handleSubmit,
@@ -38,16 +37,29 @@ export default function LoginPage() {
       console.log("Environment check:", {
         hasUrl: !!supabaseUrl,
         hasKey: !!supabaseKey,
-        urlPreview: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : "missing",
+        urlPreview: supabaseUrl ? `${supabaseUrl.substring(0, 30)}...` : "missing",
+        keyPreview: supabaseKey ? `${supabaseKey.substring(0, 30)}...` : "missing",
       });
       
       if (!supabaseUrl || !supabaseKey) {
-        throw new Error("Configuração do Supabase não encontrada. Verifique as variáveis de ambiente na Vercel.");
+        const errorMsg = "Configuração do Supabase não encontrada. As variáveis NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY precisam estar configuradas na Vercel. Após configurar, faça um redeploy.";
+        console.error(errorMsg);
+        toast.error(errorMsg);
+        setIsLoading(false);
+        return;
       }
       
-      if (supabaseUrl.includes("seu-projeto") || supabaseKey.includes("your-anon-key")) {
-        throw new Error("Variáveis de ambiente não configuradas corretamente. Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY na Vercel.");
+      if (supabaseUrl.includes("seu-projeto") || supabaseUrl.includes("your-project") || 
+          supabaseKey.includes("your-anon-key") || supabaseKey.length < 50) {
+        const errorMsg = "Variáveis de ambiente não configuradas corretamente. Configure NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY na Vercel com os valores corretos.";
+        console.error(errorMsg);
+        toast.error(errorMsg);
+        setIsLoading(false);
+        return;
       }
+      
+      // Cria o cliente Supabase
+      const supabase = createClient();
       
       // Faz login no cliente primeiro
       const { data: authData, error } = await supabase.auth.signInWithPassword({
