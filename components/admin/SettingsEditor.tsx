@@ -53,10 +53,10 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
       return;
     }
 
-    // Validação de tamanho (máximo 2MB para logo)
-    const maxSize = 2 * 1024 * 1024; // 2MB em bytes
+    // Validação de tamanho (máximo 15MB para logo)
+    const maxSize = 15 * 1024 * 1024; // 15MB em bytes
     if (file.size > maxSize) {
-      toast.error("O logo deve ter no máximo 2MB. Por favor, comprima a imagem e tente novamente.");
+      toast.error("O logo deve ter no máximo 15MB. Por favor, comprima a imagem e tente novamente.");
       return;
     }
 
@@ -118,10 +118,10 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
       return;
     }
 
-    // Validação de tamanho (máximo 2MB para logo)
-    const maxSize = 2 * 1024 * 1024; // 2MB em bytes
+    // Validação de tamanho (máximo 15MB para logo)
+    const maxSize = 15 * 1024 * 1024; // 15MB em bytes
     if (file.size > maxSize) {
-      toast.error("O logo deve ter no máximo 2MB. Por favor, comprima a imagem e tente novamente.");
+      toast.error("O logo deve ter no máximo 15MB. Por favor, comprima a imagem e tente novamente.");
       return;
     }
 
@@ -253,7 +253,7 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
             )}
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Formatos aceitos: JPG, PNG, WEBP, SVG. Tamanho máximo: 2MB. Recomendado: fundo transparente (PNG/SVG)
+            Formatos aceitos: JPG, PNG, WEBP, SVG. Tamanho máximo: 15MB. Recomendado: fundo transparente (PNG/SVG)
           </p>
         </div>
 
@@ -299,7 +299,7 @@ export default function SettingsEditor({ siteSettings }: SettingsEditorProps) {
             )}
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Logo branco para usar em fundos escuros. Formatos aceitos: JPG, PNG, WEBP, SVG. Tamanho máximo: 2MB.
+            Logo branco para usar em fundos escuros. Formatos aceitos: JPG, PNG, WEBP, SVG. Tamanho máximo: 15MB.
           </p>
         </div>
 

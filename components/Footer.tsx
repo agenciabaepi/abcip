@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { Facebook, Instagram, Linkedin, Twitter, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   const [footerSettings, setFooterSettings] = useState<any>(null);
   const [siteSettings, setSiteSettings] = useState<any>(null);
-  const [links, setLinks] = useState<{ label: string; url: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,13 +15,12 @@ export default function Footer() {
       try {
         const supabase = createClient();
         const [footerData, siteData] = await Promise.all([
-          supabase.from("footer_settings").select("*").single(),
-          supabase.from("site_settings").select("logo_white_url, site_name").single(),
+          supabase.from("footer_settings").select("*, background_image_url").single(),
+          supabase.from("site_settings").select("logo_white_url, site_name, site_description").single(),
         ]);
         
         if (footerData.data) {
           setFooterSettings(footerData.data);
-          setLinks(footerData.data.links ? JSON.parse(footerData.data.links) : []);
         }
         
         if (siteData.data) {
@@ -39,113 +37,69 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          <div>
-            <Link href="/" className="inline-block mb-3 sm:mb-4">
-              {siteSettings?.logo_white_url ? (
-                <div className="relative h-10 sm:h-12 w-auto">
-                  <img
+    <footer 
+      className="text-white relative overflow-hidden"
+      style={{
+        backgroundColor: footerSettings?.background_image_url ? 'transparent' : '#111827',
+        backgroundImage: footerSettings?.background_image_url 
+          ? `url(${footerSettings.background_image_url})` 
+          : undefined,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      {/* Overlay escuro para melhorar legibilidade do texto */}
+      {footerSettings?.background_image_url && (
+        <div className="absolute inset-0 bg-gray-900/80"></div>
+      )}
+      
+      <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Lado Esquerdo - Logo e Informações */}
+          <div className="flex flex-col items-start">
+            {/* Logo - Muito Grande */}
+            {siteSettings?.logo_white_url && (
+              <div className="mb-6">
+                <div className="relative h-40 w-40 md:h-52 md:w-52 lg:h-60 lg:w-60">
+                  <Image
                     src={siteSettings.logo_white_url}
                     alt={siteSettings.site_name || "ABCIP"}
-                    className="h-full w-auto object-contain"
-                    style={{ maxWidth: "200px" }}
-                    onError={(e) => {
-                      // Se o logo falhar ao carregar, mostra o texto
-                      e.currentTarget.style.display = "none";
-                      const parent = e.currentTarget.parentElement;
-                      if (parent) {
-                        const fallback = document.createElement("span");
-                        fallback.className = "text-xl sm:text-2xl font-bold text-white";
-                        fallback.textContent = siteSettings?.site_name || "ABCIP";
-                        parent.appendChild(fallback);
-                      }
-                    }}
+                    fill
+                    className="object-contain"
                   />
                 </div>
-              ) : (
-                <h3 className="text-xl sm:text-2xl font-bold text-white">
-                  {siteSettings?.site_name || "ABCIP"}
-                </h3>
-              )}
-            </Link>
-            <p className="text-sm sm:text-base text-gray-400">
-              Concessionária de Iluminação Pública
-            </p>
+              </div>
+            )}
+
+            {/* Descrição da Empresa */}
+            {siteSettings?.site_description && (
+              <p className="text-[15px] text-white leading-relaxed mb-4 max-w-lg text-left">
+                {siteSettings.site_description}
+              </p>
+            )}
+
+            {/* Endereço */}
+            {footerSettings?.address && (
+              <p className="text-[15px] text-white leading-relaxed whitespace-pre-line text-left">
+                {footerSettings.address}
+              </p>
+            )}
           </div>
 
-          <div>
-            <h4 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Links Úteis</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-sm sm:text-base text-gray-400 hover:text-white transition">
-                  Início
-                </Link>
-              </li>
-              <li>
-                <Link href="/noticias" className="text-sm sm:text-base text-gray-400 hover:text-white transition">
-                  Notícias
-                </Link>
-              </li>
-              <li>
-                <Link href="/quem-somos" className="text-sm sm:text-base text-gray-400 hover:text-white transition">
-                  Quem Somos
-                </Link>
-              </li>
-              <li>
-                <Link href="/contato" className="text-sm sm:text-base text-gray-400 hover:text-white transition">
-                  Contato
-                </Link>
-              </li>
-              {links.map((link: { label: string; url: string }, index: number) => (
-                <li key={index}>
-                  <Link
-                    href={link.url}
-                    className="text-sm sm:text-base text-gray-400 hover:text-white transition"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Contato</h4>
-            <ul className="space-y-2 text-sm sm:text-base text-gray-400">
-              {footerSettings?.address && (
-                <li className="flex items-start">
-                  <MapPin className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" />
-                  <span>{footerSettings.address}</span>
-                </li>
-              )}
-              {footerSettings?.phone && (
-                <li className="flex items-center">
-                  <Phone className="w-5 h-5 mr-2 flex-shrink-0" />
-                  <span>{footerSettings.phone}</span>
-                </li>
-              )}
-              {footerSettings?.email && (
-                <li className="flex items-center">
-                  <Mail className="w-5 h-5 mr-2 flex-shrink-0" />
-                  <span>{footerSettings.email}</span>
-                </li>
-              )}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Redes Sociais</h4>
-            <div className="flex space-x-3 sm:space-x-4">
-              {footerSettings?.facebook && (
+          {/* Lado Direito - Redes Sociais e Contato */}
+          <div className="flex flex-col items-start lg:items-end lg:justify-start">
+            {/* Redes Sociais */}
+            <div className="flex items-center gap-3 mb-6">
+              {footerSettings?.linkedin && (
                 <a
-                  href={footerSettings.facebook}
+                  href={footerSettings.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition"
+                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="LinkedIn"
                 >
-                  <Facebook className="w-6 h-6" />
+                  <Linkedin className="w-5 h-5 text-gray-900" />
                 </a>
               )}
               {footerSettings?.instagram && (
@@ -153,42 +107,55 @@ export default function Footer() {
                   href={footerSettings.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition"
+                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="Instagram"
                 >
-                  <Instagram className="w-6 h-6" />
+                  <Instagram className="w-5 h-5 text-gray-900" />
                 </a>
               )}
-              {footerSettings?.linkedin && (
+              {footerSettings?.facebook && (
                 <a
-                  href={footerSettings.linkedin}
+                  href={footerSettings.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition"
+                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="Facebook"
                 >
-                  <Linkedin className="w-6 h-6" />
+                  <Facebook className="w-5 h-5 text-gray-900" />
                 </a>
               )}
-              {footerSettings?.twitter && (
+              {footerSettings?.youtube && (
                 <a
-                  href={footerSettings.twitter}
+                  href={footerSettings.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-white transition"
+                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="YouTube"
                 >
-                  <Twitter className="w-6 h-6" />
+                  <Youtube className="w-5 h-5 text-gray-900" />
                 </a>
               )}
             </div>
-          </div>
-        </div>
 
-        <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center">
-          <p className="text-xs sm:text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} ABCIP. Todos os direitos reservados.
-          </p>
+            {/* Telefone */}
+            {footerSettings?.phone && (
+              <p className="text-[15px] text-white mb-3 text-right lg:text-right">
+                {footerSettings.phone}
+              </p>
+            )}
+
+            {/* Email */}
+            {footerSettings?.email && (
+              <a 
+                href={`mailto:${footerSettings.email}`} 
+                className="text-[15px] text-white hover:underline text-right lg:text-right"
+              >
+                {footerSettings.email}
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </footer>
   );
 }
-

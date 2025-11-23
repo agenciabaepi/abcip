@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Banner } from "@/lib/types";
+import ABCIPText from "@/components/ABCIPText";
 
 interface BannerSliderProps {
   banners: Banner[];
@@ -48,10 +49,10 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
 
   if (banners.length === 0) {
     return (
-      <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[55vh] min-h-[300px] bg-gradient-to-r from-dark-900 to-dark-800 flex items-center justify-center">
+      <div className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] min-h-[500px] bg-gradient-to-r from-dark-900 to-dark-800 flex items-center justify-center">
         <div className="text-center text-white px-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 tracking-tight">
-            ABCIP
+            <ABCIPText>ABCIP</ABCIPText>
           </h1>
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-200">
             Concessionária de Iluminação Pública
@@ -72,7 +73,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
   const currentBanner = banners[currentIndex];
 
   return (
-    <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] lg:h-[55vh] min-h-[300px] overflow-hidden">
+    <div className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] min-h-[500px] overflow-hidden">
       {banners.map((banner, index) => (
         <div
           key={banner.id}
@@ -80,10 +81,10 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}
         >
-          {/* Imagem com efeito de zoom suave */}
+          {/* Imagem com efeito de zoom suave (se habilitado) */}
           <div 
             className={`absolute inset-0 ${
-              index === currentIndex ? "banner-zoom-active" : ""
+              index === currentIndex && banner.enable_zoom !== false ? "banner-zoom-active" : ""
             }`}
           >
             <Image
@@ -98,33 +99,48 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
           {/* Overlay gradiente escuro */}
           <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/30 to-transparent" />
           
-          {/* Conteúdo no canto inferior esquerdo */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10 lg:p-12">
-            <div className="max-w-4xl">
-              {banner.title && (
-                <div className="relative inline-block">
-                  {/* Shape decorativo embaixo do título */}
-                  <div className="absolute -bottom-2 left-0 right-0 h-2 bg-[#5FE074] rounded-sm transform -skew-x-12" />
-                  <h1 className="relative text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 sm:mb-4 tracking-tight drop-shadow-lg">
-                    {banner.title}
-                  </h1>
-                </div>
-              )}
-              {banner.subtitle && (
-                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 mt-4 sm:mt-6 max-w-2xl drop-shadow-md">
+          {/* Título centralizado verticalmente no canto esquerdo */}
+          {banner.title && (
+            <div className="absolute top-1/2 left-0 -translate-y-1/2">
+              {/* Retângulo azul semi-transparente no fundo do título, encostado no canto */}
+              <div className="px-5 sm:px-7 md:px-9 lg:px-11 py-3 sm:py-4 md:py-5 lg:py-6" style={{ backgroundColor: 'rgba(12, 13, 43, 0.75)' }}>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight whitespace-nowrap">
+                  {banner.title}
+                </h1>
+              </div>
+            </div>
+          )}
+          
+          {/* Conteúdo adicional (subtitle e link) no canto inferior esquerdo */}
+          {banner.subtitle && (
+            <div className="absolute bottom-0 left-0 p-6 sm:p-8 md:p-10 lg:p-12">
+              <div className="max-w-4xl">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 max-w-2xl drop-shadow-md">
                   {banner.subtitle}
                 </p>
-              )}
-              {banner.link && (
-                <a
-                  href={banner.link}
-                  className="inline-block mt-4 sm:mt-6 px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base bg-[#5FE074] text-[#031C30] rounded-lg hover:bg-[#4fd064] transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:scale-105 transform"
-                >
-                  Saiba Mais
-                </a>
-              )}
+                {banner.link && (
+                  <a
+                    href={banner.link}
+                    className="inline-block mt-4 sm:mt-6 px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base bg-[#5FE074] text-[#031C30] rounded-lg hover:bg-[#4fd064] transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:scale-105 transform"
+                  >
+                    Saiba Mais
+                  </a>
+                )}
+              </div>
             </div>
-          </div>
+          )}
+          
+          {/* Link sem subtitle */}
+          {!banner.subtitle && banner.link && (
+            <div className="absolute bottom-0 left-0 p-6 sm:p-8 md:p-10 lg:p-12">
+              <a
+                href={banner.link}
+                className="inline-block px-6 sm:px-8 py-3 sm:py-3.5 text-sm sm:text-base bg-[#5FE074] text-[#031C30] rounded-lg hover:bg-[#4fd064] transition-all duration-300 font-bold shadow-lg hover:shadow-xl hover:scale-105 transform"
+              >
+                Saiba Mais
+              </a>
+            </div>
+          )}
         </div>
       ))}
 

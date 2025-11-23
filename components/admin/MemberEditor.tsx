@@ -56,9 +56,9 @@ export default function MemberEditor({ member, type }: MemberEditorProps) {
       return;
     }
 
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 15 * 1024 * 1024;
     if (file.size > maxSize) {
-      toast.error("A imagem deve ter no máximo 5MB.");
+      toast.error("A imagem deve ter no máximo 15MB.");
       return;
     }
 
@@ -200,7 +200,7 @@ export default function MemberEditor({ member, type }: MemberEditorProps) {
             <p className="text-sm text-gray-500 mt-1">Enviando foto...</p>
           )}
           <p className="text-xs text-gray-500 mt-1">
-            Formatos: JPG, PNG, WEBP. Máx: 5MB
+            Formatos: JPG, PNG, WEBP. Máx: 15MB
           </p>
         </div>
 

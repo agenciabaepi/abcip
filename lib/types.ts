@@ -22,6 +22,7 @@ export interface Banner {
   subtitle?: string;
   link?: string;
   order: number;
+  enable_zoom?: boolean;
   created_at: string;
 }
 
@@ -77,7 +78,9 @@ export interface FooterSettings {
   instagram?: string;
   linkedin?: string;
   twitter?: string;
+  youtube?: string;
   links?: string; // JSON string
+  background_image_url?: string;
   updated_at: string;
 }
 
@@ -108,6 +111,16 @@ export interface CTASection {
   button_link?: string;
   image_url?: string;
   active: boolean;
+  use_dual_cta?: boolean;
+  cta1_button_color?: string;
+  cta2_title?: string;
+  cta2_description?: string;
+  cta2_button_text?: string;
+  cta2_button_link?: string;
+  cta2_image_url?: string;
+  cta2_background_color?: string;
+  cta2_text_color?: string;
+  cta2_button_color?: string;
   created_at: string;
   updated_at: string;
 }

@@ -24,9 +24,9 @@ export async function POST(request: Request) {
     console.log("API - User ID:", user.id);
 
     const body = await request.json();
-    const { image_url, title, subtitle, link, order } = body;
+    const { image_url, title, subtitle, link, order, enable_zoom } = body;
 
-    console.log("API - Inserting banner with data:", { image_url, title, subtitle, link, order });
+    console.log("API - Inserting banner with data:", { image_url, title, subtitle, link, order, enable_zoom });
 
     // Insere o banner usando o cliente do servidor (que tem a sessão correta)
     const { data, error } = await supabase
@@ -37,6 +37,7 @@ export async function POST(request: Request) {
         subtitle: subtitle || null,
         link: link || null,
         order: order || 0,
+        enable_zoom: enable_zoom !== undefined ? enable_zoom : true,
       })
       .select()
       .single();
@@ -78,7 +79,7 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { id, image_url, title, subtitle, link, order } = body;
+    const { id, image_url, title, subtitle, link, order, enable_zoom } = body;
 
     // Atualiza o banner usando o cliente do servidor
     const { data, error } = await supabase
@@ -89,6 +90,7 @@ export async function PUT(request: Request) {
         subtitle: subtitle || null,
         link: link || null,
         order: order || 0,
+        enable_zoom: enable_zoom !== undefined ? enable_zoom : true,
       })
       .eq("id", id)
       .select()

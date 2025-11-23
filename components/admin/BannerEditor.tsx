@@ -17,6 +17,7 @@ interface BannerForm {
   subtitle: string;
   link: string;
   order: number;
+  enable_zoom: boolean;
 }
 
 export default function BannerEditor({ banner }: BannerEditorProps) {
@@ -38,6 +39,7 @@ export default function BannerEditor({ banner }: BannerEditorProps) {
       subtitle: banner?.subtitle || "",
       link: banner?.link || "",
       order: banner?.order || 0,
+      enable_zoom: banner?.enable_zoom !== false, // Default true se não especificado
     },
   });
 
@@ -52,10 +54,10 @@ export default function BannerEditor({ banner }: BannerEditorProps) {
       return;
     }
 
-    // Validação de tamanho (máximo 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+    // Validação de tamanho (máximo 15MB)
+    const maxSize = 15 * 1024 * 1024; // 15MB em bytes
     if (file.size > maxSize) {
-      toast.error("A imagem deve ter no máximo 5MB. Por favor, comprima a imagem e tente novamente.");
+      toast.error("A imagem deve ter no máximo 15MB. Por favor, comprima a imagem e tente novamente.");
       return;
     }
 
@@ -149,6 +151,7 @@ export default function BannerEditor({ banner }: BannerEditorProps) {
         subtitle: data.subtitle || null,
         link: data.link || null,
         order: data.order || 0,
+        enable_zoom: data.enable_zoom,
       };
 
       if (banner) {
@@ -252,7 +255,7 @@ export default function BannerEditor({ banner }: BannerEditorProps) {
             )}
           </div>
           <p className="text-xs text-gray-500 mt-1">
-            Formatos aceitos: JPG, PNG, WEBP, GIF. Tamanho máximo: 5MB
+            Formatos aceitos: JPG, PNG, WEBP, GIF. Tamanho máximo: 15MB
           </p>
         </div>
 
@@ -304,6 +307,22 @@ export default function BannerEditor({ banner }: BannerEditorProps) {
           />
           <p className="text-sm text-gray-500 mt-1">
             Banners com menor número aparecem primeiro
+          </p>
+        </div>
+
+        <div>
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="checkbox"
+              {...register("enable_zoom")}
+              className="w-4 h-4 text-primary-500 border-gray-300 rounded focus:ring-primary-500"
+            />
+            <span className="text-sm font-medium text-gray-700">
+              Habilitar efeito de zoom na imagem
+            </span>
+          </label>
+          <p className="text-sm text-gray-500 mt-1 ml-6">
+            Quando habilitado, a imagem do banner terá um efeito de zoom suave
           </p>
         </div>
 

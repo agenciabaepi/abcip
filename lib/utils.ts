@@ -1,16 +1,17 @@
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
 /**
- * Extrai o ID do vídeo do YouTube a partir de uma URL
- * Suporta vários formatos:
- * - https://www.youtube.com/watch?v=VIDEO_ID
- * - https://youtu.be/VIDEO_ID
- * - https://www.youtube.com/embed/VIDEO_ID
+ * Extrai o ID do YouTube de uma URL
  */
 export function extractYouTubeId(url: string): string | null {
-  if (!url) return null;
-
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-    /^([a-zA-Z0-9_-]{11})$/,
+    /youtube\.com\/.*[?&]v=([^&\n?#]+)/,
   ];
 
   for (const pattern of patterns) {
@@ -24,39 +25,43 @@ export function extractYouTubeId(url: string): string | null {
 }
 
 /**
- * Gera a URL da thumbnail do YouTube
+ * Obtém a URL da thumbnail do YouTube
  */
-export function getYouTubeThumbnail(videoId: string, quality: 'default' | 'medium' | 'high' | 'maxres' = 'high'): string {
-  const qualities = {
-    default: 'default',
-    medium: 'mqdefault',
-    high: 'hqdefault',
-    maxres: 'maxresdefault',
-  };
-
-  return `https://img.youtube.com/vi/${videoId}/${qualities[quality]}.jpg`;
+export function getYouTubeThumbnail(url: string): string {
+  const videoId = extractYouTubeId(url);
+  if (videoId) {
+    return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  }
+  return "";
 }
 
 /**
- * Gera a URL de embed do YouTube
+ * Obtém a URL de embed do YouTube
  */
-export function getYouTubeEmbedUrl(videoId: string): string {
-  return `https://www.youtube.com/embed/${videoId}`;
+export function getYouTubeEmbedUrl(url: string): string {
+  const videoId = extractYouTubeId(url);
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return url;
 }
 
 /**
- * Calcula o tempo estimado de leitura de um texto
+ * Calcula o tempo de leitura estimado de um texto
+ * Baseado em ~200 palavras por minuto
  */
-export function calculateReadingTime(text: string): number {
-  if (!text) return 0;
+export function calculateReadingTime(content: string): number {
+  if (!content) return 1;
   
-  // Remove HTML tags se houver
-  const plainText = text.replace(/<[^>]*>/g, '');
+  // Remove tags HTML e espaços extras
+  const text = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
   
-  // Média de palavras por minuto: 200-250 palavras
-  const wordsPerMinute = 225;
-  const wordCount = plainText.trim().split(/\s+/).length;
-  const readingTime = Math.ceil(wordCount / wordsPerMinute);
+  // Conta palavras (divide por espaços)
+  const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
   
-  return readingTime || 1; // Mínimo de 1 minuto
+  // Calcula minutos (200 palavras por minuto)
+  const minutes = Math.ceil(wordCount / 200);
+  
+  // Retorna pelo menos 1 minuto
+  return Math.max(1, minutes);
 }

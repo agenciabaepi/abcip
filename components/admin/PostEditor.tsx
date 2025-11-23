@@ -70,10 +70,10 @@ export default function PostEditor({ post }: PostEditorProps) {
       return;
     }
 
-    // Validação de tamanho (máximo 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+    // Validação de tamanho (máximo 15MB)
+    const maxSize = 15 * 1024 * 1024; // 15MB em bytes
     if (file.size > maxSize) {
-      toast.error("A imagem deve ter no máximo 5MB. Por favor, comprima a imagem e tente novamente.");
+      toast.error("A imagem deve ter no máximo 15MB. Por favor, comprima a imagem e tente novamente.");
       return;
     }
 
@@ -375,7 +375,7 @@ export default function PostEditor({ post }: PostEditorProps) {
                   )}
                 </div>
                 <p className="text-xs text-gray-500">
-                  Formatos: JPG, PNG, WEBP, GIF. Máx: 5MB
+                  Formatos: JPG, PNG, WEBP, GIF. Máx: 15MB
                 </p>
               </div>
 

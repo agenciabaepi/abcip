@@ -19,6 +19,7 @@ interface FooterForm {
   instagram: string;
   linkedin: string;
   twitter: string;
+  youtube: string;
 }
 
 export default function FooterSettingsEditor({
@@ -27,6 +28,10 @@ export default function FooterSettingsEditor({
   const router = useRouter();
   const supabase = createClient();
   const [isSaving, setIsSaving] = useState(false);
+  const [backgroundImageUrl, setBackgroundImageUrl] = useState<string | null>(
+    footerSettings?.background_image_url || null
+  );
+  const [isUploading, setIsUploading] = useState(false);
 
   const parsedLinks = footerSettings?.links
     ? JSON.parse(footerSettings.links)
@@ -45,8 +50,69 @@ export default function FooterSettingsEditor({
       instagram: footerSettings?.instagram || "",
       linkedin: footerSettings?.linkedin || "",
       twitter: footerSettings?.twitter || "",
+      youtube: footerSettings?.youtube || "",
     },
   });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!validTypes.includes(file.type)) {
+      toast.error("Por favor, selecione uma imagem válida (JPG, PNG ou WEBP).");
+      return;
+    }
+
+    const maxSize = 15 * 1024 * 1024; // 15MB
+    if (file.size > maxSize) {
+      toast.error("A imagem deve ter no máximo 15MB. Por favor, comprima a imagem e tente novamente.");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      if (backgroundImageUrl) {
+        try {
+          const oldPath = backgroundImageUrl.split("/").slice(-2).join("/");
+          await supabase.storage.from("uploads").remove([oldPath]);
+        } catch (error) {
+          console.warn("Erro ao remover imagem antiga:", error);
+        }
+      }
+
+      const fileExt = file.name.split(".").pop()?.toLowerCase();
+      const fileName = `footer-bg-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `footer/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("uploads")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError) throw uploadError;
+
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("uploads").getPublicUrl(filePath);
+
+      setBackgroundImageUrl(publicUrl);
+      toast.success("Imagem de fundo enviada com sucesso!");
+    } catch (error: any) {
+      console.error("Error uploading image:", error);
+      toast.error(error.message || "Erro ao enviar imagem. Tente novamente.");
+    } finally {
+      setIsUploading(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setBackgroundImageUrl(null);
+    toast.success("Imagem removida. Selecione uma nova imagem.");
+  };
 
   const onSubmit = async (data: FooterForm) => {
     setIsSaving(true);
@@ -59,7 +125,9 @@ export default function FooterSettingsEditor({
         instagram: data.instagram || null,
         linkedin: data.linkedin || null,
         twitter: data.twitter || null,
+        youtube: data.youtube || null,
         links: JSON.stringify(parsedLinks),
+        background_image_url: backgroundImageUrl || null,
         updated_at: new Date().toISOString(),
       };
 
@@ -174,6 +242,65 @@ export default function FooterSettingsEditor({
               placeholder="https://twitter.com/abcip"
             />
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              YouTube
+            </label>
+            <input
+              type="url"
+              {...register("youtube")}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              placeholder="https://youtube.com/@abcip"
+            />
+          </div>
+        </div>
+
+        {/* Upload de Imagem de Fundo */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Imagem de Fundo do Rodapé
+          </label>
+          {backgroundImageUrl && (
+            <div className="relative w-full max-w-md aspect-video mb-4 rounded-lg overflow-hidden border border-gray-300 bg-gray-50">
+              <img
+                src={backgroundImageUrl}
+                alt="Footer Background Preview"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  console.error("Error loading footer background image:", backgroundImageUrl);
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleRemoveImage}
+                className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition text-sm font-semibold"
+              >
+                Remover
+              </button>
+            </div>
+          )}
+          <div className="relative">
+            <input
+              type="file"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+              onChange={handleImageUpload}
+              disabled={isUploading}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            {isUploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                <div className="text-center">
+                  <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-primary-500 mb-2"></div>
+                  <p className="text-sm text-gray-700 font-medium">Enviando imagem...</p>
+                </div>
+              </div>
+            )}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Formatos aceitos: JPG, PNG, WEBP. Tamanho máximo: 15MB. A imagem será aplicada como fundo do rodapé.
+          </p>
         </div>
 
         <div className="flex space-x-4">
