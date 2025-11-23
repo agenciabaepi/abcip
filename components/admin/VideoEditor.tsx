@@ -71,7 +71,7 @@ export default function VideoEditor({ video }: VideoEditorProps) {
         return;
       }
 
-      const thumbnailUrl = getYouTubeThumbnail(videoId, 'maxres');
+      const thumbnailUrl = getYouTubeThumbnail(data.youtube_url);
 
       const videoData = {
         title: data.title,
