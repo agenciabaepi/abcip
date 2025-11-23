@@ -57,7 +57,7 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                         : 'text-dark-900'
                     }`}
                     style={{
-                      backgroundColor: isLeft ? (cta.button_color || '#3b82f6') : '#5FE074'
+                      backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : '#5FE074'
                     }}
                   >
                     <span>{cta.button_text}</span>
@@ -81,7 +81,7 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                       isLeft ? 'text-white' : 'text-dark-900'
                     }`}
                     style={{
-                      backgroundColor: isLeft ? (cta.button_color || '#3b82f6') : '#5FE074'
+                      backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : '#5FE074'
                     }}
                   >
                     {cta.button_text}
