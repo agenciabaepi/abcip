@@ -50,7 +50,7 @@ export default function VideoEditor({ video }: VideoEditorProps) {
     if (youtubeUrl) {
       const videoId = extractYouTubeId(youtubeUrl);
       if (videoId) {
-        const thumbnail = getYouTubeThumbnail(videoId, 'maxres');
+        const thumbnail = getYouTubeThumbnail(youtubeUrl);
         setThumbnailPreview(thumbnail);
       } else {
         setThumbnailPreview(null);
