@@ -12,7 +12,7 @@ interface VideoCardProps {
 export default function VideoCard({ video }: VideoCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoId = extractYouTubeId(video.youtube_url);
-  const thumbnailUrl = video.thumbnail_url || (videoId ? getYouTubeThumbnail(videoId, 'maxres') : null);
+  const thumbnailUrl = video.thumbnail_url || (videoId ? getYouTubeThumbnail(video.youtube_url) : null);
   const embedUrl = videoId ? getYouTubeEmbedUrl(videoId) : null;
 
   if (!videoId || !embedUrl) {
