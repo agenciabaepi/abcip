@@ -51,12 +51,20 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                 {cta.button_link ? (
                   <Link
                     href={cta.button_link}
-                    className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                    className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                    style={{
+                      backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : (cta.cta2_button_color || '#5FE074')
+                    }}
                   >
                     <span>{cta.button_text}</span>
                   </Link>
                 ) : (
-                  <div className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-gray-400 rounded-full shadow-md opacity-75 cursor-not-allowed">
+                  <div 
+                    className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full shadow-md opacity-75 cursor-not-allowed"
+                    style={{
+                      backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : (cta.cta2_button_color || '#5FE074')
+                    }}
+                  >
                     {cta.button_text}
                   </div>
                 )}
@@ -137,12 +145,20 @@ export default function CTASection({ cta }: CTASectionProps) {
             {cta.button_link ? (
               <Link
                 href={cta.button_link}
-                className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                style={{
+                  backgroundColor: cta.cta1_button_color || '#5FE074'
+                }}
               >
                 <span>{cta.button_text || "Associe-se"}</span>
               </Link>
             ) : (
-              <div className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-gray-400 rounded-full shadow-md opacity-75 cursor-not-allowed">
+              <div 
+                className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full shadow-md opacity-75 cursor-not-allowed"
+                style={{
+                  backgroundColor: cta.cta1_button_color || '#5FE074'
+                }}
+              >
                 {cta.button_text || "Associe-se"}
               </div>
             )}
