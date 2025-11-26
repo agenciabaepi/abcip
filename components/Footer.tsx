@@ -39,7 +39,8 @@ export default function Footer() {
   return (
     <footer className="w-full">
       <div
-        className="relative w-full h-64 overflow-hidden bg-center bg-cover"
+        className="relative w-full overflow-hidden bg-center bg-cover"
+        style={{ height: '355px' }}
         style={{ 
           backgroundImage: footerSettings?.background_image_url 
             ? `url('${footerSettings.background_image_url}')` 
