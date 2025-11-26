@@ -55,8 +55,8 @@ export default function Footer() {
       )}
       
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          {/* Lado Esquerdo - Logo e Informações */}
+        <div className="relative min-h-[300px] lg:min-h-[400px]">
+          {/* Logo e Informações - Lado Esquerdo */}
           <div className="flex flex-col items-start">
             {/* Logo - Muito Grande */}
             {siteSettings?.logo_white_url && (
@@ -87,59 +87,11 @@ export default function Footer() {
             )}
           </div>
 
-          {/* Lado Direito - Redes Sociais e Contato */}
-          <div className="flex flex-col items-start lg:items-end lg:justify-start">
-            {/* Redes Sociais */}
-            <div className="flex items-center gap-3 mb-6">
-              {footerSettings?.linkedin && (
-                <a
-                  href={footerSettings.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-5 h-5 text-gray-900" />
-                </a>
-              )}
-              {footerSettings?.instagram && (
-                <a
-                  href={footerSettings.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5 text-gray-900" />
-                </a>
-              )}
-              {footerSettings?.facebook && (
-                <a
-                  href={footerSettings.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-5 h-5 text-gray-900" />
-                </a>
-              )}
-              {footerSettings?.youtube && (
-                <a
-                  href={footerSettings.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-5 h-5 text-gray-900" />
-                </a>
-              )}
-            </div>
-
+          {/* Redes Sociais e Contato - Canto Inferior Direito */}
+          <div className="absolute bottom-0 right-0 flex flex-col items-end">
             {/* Telefone */}
             {footerSettings?.phone && (
-              <p className="text-[15px] text-white mb-3 text-right lg:text-right">
+              <p className="text-lg text-white mb-4 text-right">
                 {footerSettings.phone}
               </p>
             )}
@@ -148,11 +100,59 @@ export default function Footer() {
             {footerSettings?.email && (
               <a 
                 href={`mailto:${footerSettings.email}`} 
-                className="text-[15px] text-white hover:underline text-right lg:text-right"
+                className="text-lg text-white hover:underline text-right mb-6"
               >
                 {footerSettings.email}
               </a>
             )}
+
+            {/* Redes Sociais - Maiores */}
+            <div className="flex items-center gap-4">
+              {footerSettings?.linkedin && (
+                <a
+                  href={footerSettings.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-7 h-7 text-gray-900" />
+                </a>
+              )}
+              {footerSettings?.instagram && (
+                <a
+                  href={footerSettings.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-7 h-7 text-gray-900" />
+                </a>
+              )}
+              {footerSettings?.facebook && (
+                <a
+                  href={footerSettings.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-7 h-7 text-gray-900" />
+                </a>
+              )}
+              {footerSettings?.youtube && (
+                <a
+                  href={footerSettings.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-7 h-7 text-gray-900" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
