@@ -41,7 +41,7 @@ export default function Footer() {
       <div
         className="relative w-full overflow-hidden bg-center bg-cover"
         style={{ 
-          height: '400px',
+          height: '350px',
           backgroundImage: footerSettings?.background_image_url 
             ? `url('${footerSettings.background_image_url}')` 
             : `url('/images/footer-bg.jpg')`
@@ -51,11 +51,11 @@ export default function Footer() {
         <div className="absolute inset-0 bg-black/60" />
 
         {/* Container principal */}
-        <div className="relative z-10 w-full h-full flex items-center justify-between px-12">
+        <div className="relative z-10 w-full h-full flex items-center justify-between pr-12">
           {/* Lado Esquerdo - Logo e Textos */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center pl-20">
             {/* Logo */}
-            <div className="mb-8">
+            <div className="mb-6">
               {siteSettings?.logo_white_url ? (
                 <div className="relative w-64 h-32">
                   <Image
@@ -80,13 +80,13 @@ export default function Footer() {
             </div>
 
             {/* Descrição */}
-            <div className="text-white text-xl leading-relaxed mb-8 font-light max-w-xl">
+            <div className="text-white text-xl leading-tight mb-6 font-extralight max-w-xl">
               Associação Brasileira das Concessionárias<br />
               de Iluminação Pública e Cidades Inteligentes
             </div>
 
             {/* Endereço */}
-            <div className="text-white text-xl leading-relaxed font-light">
+            <div className="text-white text-xl leading-tight font-extralight">
               Rua Augusta, 2840, 5º Andar<br />
               São Paulo - SP - 01412-100
             </div>
