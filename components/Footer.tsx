@@ -87,11 +87,11 @@ export default function Footer() {
             )}
           </div>
 
-          {/* Redes Sociais e Contato - Canto Inferior Direito */}
-          <div className="absolute bottom-0 right-0 flex flex-col items-end">
+          {/* Telefone e Email - Lado Direito */}
+          <div className="absolute top-0 right-0 flex flex-col items-end">
             {/* Telefone */}
             {footerSettings?.phone && (
-              <p className="text-lg text-white mb-4 text-right">
+              <p className="text-lg text-white mb-2 text-right">
                 {footerSettings.phone}
               </p>
             )}
@@ -100,59 +100,59 @@ export default function Footer() {
             {footerSettings?.email && (
               <a 
                 href={`mailto:${footerSettings.email}`} 
-                className="text-lg text-white hover:underline text-right mb-6"
+                className="text-lg text-white hover:underline text-right"
               >
                 {footerSettings.email}
               </a>
             )}
+          </div>
 
-            {/* Redes Sociais - Maiores */}
-            <div className="flex items-center gap-4">
-              {footerSettings?.linkedin && (
-                <a
-                  href={footerSettings.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="LinkedIn"
-                >
-                  <Linkedin className="w-7 h-7 text-gray-900" />
-                </a>
-              )}
-              {footerSettings?.instagram && (
-                <a
-                  href={footerSettings.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-7 h-7 text-gray-900" />
-                </a>
-              )}
-              {footerSettings?.facebook && (
-                <a
-                  href={footerSettings.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="Facebook"
-                >
-                  <Facebook className="w-7 h-7 text-gray-900" />
-                </a>
-              )}
-              {footerSettings?.youtube && (
-                <a
-                  href={footerSettings.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-14 h-14 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-7 h-7 text-gray-900" />
-                </a>
-              )}
-            </div>
+          {/* Redes Sociais - Bem no Canto Inferior Direito */}
+          <div className="absolute bottom-0 right-0 flex items-center gap-4">
+            {footerSettings?.linkedin && (
+              <a
+                href={footerSettings.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-8 h-8 text-gray-900" />
+              </a>
+            )}
+            {footerSettings?.instagram && (
+              <a
+                href={footerSettings.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-8 h-8 text-gray-900" />
+              </a>
+            )}
+            {footerSettings?.facebook && (
+              <a
+                href={footerSettings.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-8 h-8 text-gray-900" />
+              </a>
+            )}
+            {footerSettings?.youtube && (
+              <a
+                href={footerSettings.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-8 h-8 text-gray-900" />
+              </a>
+            )}
           </div>
         </div>
       </div>
