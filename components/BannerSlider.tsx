@@ -96,8 +96,6 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
             />
           </div>
           
-          {/* Overlay gradiente escuro */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/30 to-transparent" />
           
           {/* Título centralizado verticalmente no canto esquerdo */}
           {banner.title && (
