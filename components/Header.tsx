@@ -82,11 +82,11 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto pl-2 pr-4 sm:pl-4 sm:pr-6 lg:pl-6 lg:pr-8">
+      <div className="max-w-7xl mx-auto pl-1 pr-4 sm:pl-2 sm:pr-6 lg:pl-3 lg:pr-8">
         <div className="flex items-center h-28 md:h-32">
           {/* Logo - Esquerda */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center mr-12">
+            <Link href="/" className="flex items-center mr-16">
               {logoUrl ? (
                 <div className="relative h-20 md:h-24 w-auto">
                   <img
