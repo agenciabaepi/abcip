@@ -17,7 +17,7 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
           {/* Imagem - Sempre à esquerda */}
           {cta.image_url && (
             <div className="relative order-1">
-              <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden shadow-xl">
+              <div className="relative aspect-square w-full rounded-lg overflow-hidden shadow-xl">
                 <Image
                   src={cta.image_url}
                   alt={cta.title}
@@ -51,39 +51,12 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                 {cta.button_link ? (
                   <Link
                     href={cta.button_link}
-                    className={`group inline-flex items-center justify-center gap-2 px-8 py-4 font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform ${
-                      isLeft 
-                        ? `text-white` 
-                        : 'text-dark-900'
-                    }`}
-                    style={{
-                      backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : '#5FE074'
-                    }}
+                    className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
                   >
                     <span>{cta.button_text}</span>
-                    <svg
-                      className="w-5 h-5 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.5}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
                   </Link>
                 ) : (
-                  <div 
-                    className={`inline-flex items-center justify-center gap-2 px-8 py-4 font-bold text-lg rounded-lg shadow-md opacity-75 cursor-not-allowed ${
-                      isLeft ? 'text-white' : 'text-dark-900'
-                    }`}
-                    style={{
-                      backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : '#5FE074'
-                    }}
-                  >
+                  <div className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-gray-400 rounded-full shadow-md opacity-75 cursor-not-allowed">
                     {cta.button_text}
                   </div>
                 )}
@@ -139,7 +112,7 @@ export default function CTASection({ cta }: CTASectionProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center">
           {cta.image_url && (
             <div className="relative order-2 lg:order-1">
-              <div className="relative aspect-[3/4] max-h-80 rounded-xl overflow-hidden shadow-2xl group">
+              <div className="relative aspect-square max-h-80 rounded-xl overflow-hidden shadow-2xl group">
                 <Image
                   src={cta.image_url}
                   alt={cta.title}
@@ -164,25 +137,12 @@ export default function CTASection({ cta }: CTASectionProps) {
             {cta.button_link ? (
               <Link
                 href={cta.button_link}
-                className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#5FE074] to-[#4fd064] hover:from-[#4fd064] hover:to-[#45c055] text-[#031C30] font-bold text-base rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-[#5FE074]/50 hover:scale-105 transform overflow-hidden"
+                className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
               >
-                <span className="relative z-10">{cta.button_text || "Associe-se"}</span>
-                <svg
-                  className="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
+                <span>{cta.button_text || "Associe-se"}</span>
               </Link>
             ) : (
-              <div className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#5FE074] to-[#4fd064] text-[#031C30] font-bold text-base rounded-lg shadow-md opacity-75 cursor-not-allowed">
+              <div className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white bg-gray-400 rounded-full shadow-md opacity-75 cursor-not-allowed">
                 {cta.button_text || "Associe-se"}
               </div>
             )}
