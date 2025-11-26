@@ -39,7 +39,7 @@ export default function Footer() {
   return (
     <footer className="w-full">
       <div
-        className="relative w-full h-52 overflow-hidden bg-center bg-cover"
+        className="relative w-full h-64 overflow-hidden bg-center bg-cover"
         style={{ 
           backgroundImage: footerSettings?.background_image_url 
             ? `url('${footerSettings.background_image_url}')` 
@@ -52,38 +52,41 @@ export default function Footer() {
         {/* Container principal */}
         <div className="relative z-10 w-full h-full flex">
           {/* Lado Esquerdo - Logo e Textos */}
-          <div className="flex-1 flex items-center pl-8">
-            <div className="flex items-center gap-6">
-              {/* Logo */}
-              <div className="flex-shrink-0">
-                {siteSettings?.logo_white_url ? (
-                  <div className="relative w-20 h-20">
-                    <Image
-                      src={siteSettings.logo_white_url}
-                      alt="ABCIP"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-                    <div className="w-16 h-16 rounded-full bg-green-400 flex items-center justify-center">
-                      <div className="w-10 h-10 bg-white rounded-full"></div>
+          <div className="flex-1 flex flex-col justify-center pl-8">
+            {/* Logo MUITO MAIOR */}
+            <div className="mb-6">
+              {siteSettings?.logo_white_url ? (
+                <div className="relative w-48 h-24">
+                  <Image
+                    src={siteSettings.logo_white_url}
+                    alt="ABCIP"
+                    fill
+                    className="object-contain object-left"
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <div className="w-24 h-24 rounded-full bg-white/10 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-green-400 flex items-center justify-center">
+                      <div className="w-12 h-12 bg-white rounded-full"></div>
                     </div>
                   </div>
-                )}
-              </div>
+                  <div className="text-white text-6xl font-bold tracking-wide">
+                    AB<span className="font-bold">CI</span>P
+                  </div>
+                </div>
+              )}
+            </div>
 
-              {/* Textos */}
-              <div className="text-white">
-                <div className="text-sm leading-tight mb-3">
-                  Associação Brasileira das Concessionárias<br />
-                  de Iluminação Pública e Cidades Inteligentes
-                </div>
-                <div className="text-sm leading-tight">
-                  Rua Augusta, 2840, 5º Andar<br />
-                  São Paulo - SP - 01412-100
-                </div>
+            {/* Textos embaixo do logo */}
+            <div className="text-white">
+              <div className="text-lg leading-relaxed mb-4 font-light">
+                Associação Brasileira das Concessionárias<br />
+                de Iluminação Pública e Cidades Inteligentes
+              </div>
+              <div className="text-lg leading-relaxed font-light">
+                Rua Augusta, 2840, 5º Andar<br />
+                São Paulo - SP - 01412-100
               </div>
             </div>
           </div>
