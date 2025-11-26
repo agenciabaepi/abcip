@@ -83,24 +83,24 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center h-20 md:h-24">
+        <div className="flex items-center h-24 md:h-28">
           {/* Logo - Esquerda */}
           <div className="flex items-center flex-1">
             <Link href="/" className="flex items-center">
               {logoUrl ? (
-                <div className="relative h-14 md:h-16 w-auto">
+                <div className="relative h-16 md:h-20 w-auto">
                   <img
                     src={logoUrl}
                     alt={siteName}
                     className="h-full w-auto object-contain"
-                    style={{ maxWidth: "250px" }}
+                    style={{ maxWidth: "300px" }}
                     onError={(e) => {
                       // Se o logo falhar ao carregar, mostra o texto
                       e.currentTarget.style.display = "none";
                       const parent = e.currentTarget.parentElement;
                       if (parent) {
                         const fallback = document.createElement("span");
-                        fallback.className = "text-2xl md:text-3xl font-bold text-dark-900 tracking-tight";
+                        fallback.className = "text-3xl md:text-4xl font-bold text-dark-900 tracking-tight";
                         fallback.textContent = siteName;
                         parent.appendChild(fallback);
                       }
@@ -108,7 +108,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                   />
                 </div>
               ) : (
-                <span className="text-2xl md:text-3xl font-bold text-dark-900 tracking-tight">
+                <span className="text-3xl md:text-4xl font-bold text-dark-900 tracking-tight">
                   <ABCIPText>{siteName}</ABCIPText>
                 </span>
               )}
@@ -131,7 +131,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                   >
                     <Link
                       href={link.href}
-                      className={`text-lg font-medium transition-colors relative pb-1 whitespace-nowrap flex items-center gap-1 ${
+                      className={`text-xl font-medium transition-colors relative pb-1 whitespace-nowrap flex items-center gap-1 ${
                         active
                           ? "text-primary-400"
                           : "text-dark-900"
@@ -167,7 +167,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-lg font-medium transition-colors relative pb-1 whitespace-nowrap ${
+                  className={`text-xl font-medium transition-colors relative pb-1 whitespace-nowrap ${
                     active
                       ? "text-primary-400"
                       : "text-dark-900"
@@ -251,7 +251,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                     <div key={link.href}>
                       <button
                         onClick={() => setOpenDropdown(isMobileDropdownOpen ? null : `mobile-${link.href}`)}
-                        className={`w-full px-4 py-3 text-base font-medium rounded-lg transition-colors flex items-center justify-between ${
+                        className={`w-full px-4 py-3 text-lg font-medium rounded-lg transition-colors flex items-center justify-between ${
                           active
                             ? "text-primary-400 bg-primary-50"
                             : "text-dark-900 hover:bg-gray-50"
@@ -290,7 +290,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 text-base font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                    className={`px-4 py-3 text-lg font-medium rounded-lg transition-colors flex items-center gap-2 ${
                       active
                         ? "text-primary-400 bg-primary-50"
                         : "text-dark-900 hover:bg-gray-50"
