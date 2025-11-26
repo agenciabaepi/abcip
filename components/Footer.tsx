@@ -54,8 +54,8 @@ export default function Footer() {
         <div className="absolute inset-0 bg-gray-900/80"></div>
       )}
       
-      <div className="relative w-full px-8 py-8">
-        <div className="flex justify-between items-start h-full">
+      <div className="relative w-full px-8 py-16">
+        <div className="flex justify-between items-start h-full min-h-[200px]">
           {/* Lado Esquerdo - Logo e Informações */}
           <div className="flex items-start gap-8">
             {/* Logo */}
@@ -90,27 +90,10 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Lado Direito - Contatos e Redes Sociais */}
-          <div className="flex flex-col items-end justify-between h-full min-h-[120px]">
-            {/* Contatos no Topo */}
-            <div className="flex flex-col items-end mb-4">
-              {footerSettings?.phone && (
-                <p className="text-white text-base mb-1">
-                  {footerSettings.phone}
-                </p>
-              )}
-              {footerSettings?.email && (
-                <a 
-                  href={`mailto:${footerSettings.email}`} 
-                  className="text-white text-base hover:underline"
-                >
-                  {footerSettings.email}
-                </a>
-              )}
-            </div>
-
-            {/* Redes Sociais na Parte Inferior */}
-            <div className="flex items-center gap-3">
+          {/* Lado Direito - Redes Sociais e Contatos */}
+          <div className="flex flex-col items-end justify-between h-full min-h-[180px]">
+            {/* Redes Sociais no Topo */}
+            <div className="flex items-center gap-3 mb-6">
               {footerSettings?.linkedin && (
                 <a
                   href={footerSettings.linkedin}
@@ -153,6 +136,23 @@ export default function Footer() {
                   aria-label="YouTube"
                 >
                   <Youtube className="w-6 h-6 text-gray-900" />
+                </a>
+              )}
+            </div>
+
+            {/* Contatos na Parte Inferior */}
+            <div className="flex flex-col items-end">
+              {footerSettings?.phone && (
+                <p className="text-white text-base mb-1">
+                  {footerSettings.phone}
+                </p>
+              )}
+              {footerSettings?.email && (
+                <a 
+                  href={`mailto:${footerSettings.email}`} 
+                  className="text-white text-base hover:underline"
+                >
+                  {footerSettings.email}
                 </a>
               )}
             </div>
