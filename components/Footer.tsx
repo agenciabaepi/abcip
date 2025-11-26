@@ -91,9 +91,9 @@ export default function Footer() {
           </div>
 
           {/* Lado Direito - Redes Sociais e Contatos */}
-          <div className="flex flex-col items-end justify-between h-full min-h-[180px]">
-            {/* Redes Sociais no Topo */}
-            <div className="flex items-center gap-3 mb-6">
+          <div className="flex flex-col items-end">
+            {/* Redes Sociais */}
+            <div className="flex items-center gap-3 mb-2">
               {footerSettings?.linkedin && (
                 <a
                   href={footerSettings.linkedin}
@@ -140,7 +140,7 @@ export default function Footer() {
               )}
             </div>
 
-            {/* Contatos na Parte Inferior */}
+            {/* Contatos bem embaixo dos ícones */}
             <div className="flex flex-col items-end">
               {footerSettings?.phone && (
                 <p className="text-white text-base mb-1">
