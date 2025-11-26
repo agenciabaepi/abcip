@@ -54,14 +54,14 @@ export default function Footer() {
         <div className="absolute inset-0 bg-gray-900/80"></div>
       )}
       
-      <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-16 lg:py-20">
-        <div className="relative min-h-[300px] lg:min-h-[400px]">
-          {/* Logo e Informações - Lado Esquerdo */}
-          <div className="flex flex-col items-start">
-            {/* Logo - Muito Grande */}
+      <div className="relative w-full px-8 py-8">
+        <div className="flex justify-between items-start h-full">
+          {/* Lado Esquerdo - Logo e Informações */}
+          <div className="flex items-start gap-8">
+            {/* Logo */}
             {siteSettings?.logo_white_url && (
-              <div className="mb-6">
-                <div className="relative h-40 w-40 md:h-52 md:w-52 lg:h-60 lg:w-60">
+              <div className="flex-shrink-0">
+                <div className="relative h-24 w-24">
                   <Image
                     src={siteSettings.logo_white_url}
                     alt={siteSettings.site_name || "ABCIP"}
@@ -72,87 +72,90 @@ export default function Footer() {
               </div>
             )}
 
-            {/* Descrição da Empresa */}
-            {siteSettings?.site_description && (
-              <p className="text-[15px] text-white leading-relaxed mb-4 max-w-lg text-left">
-                {siteSettings.site_description}
-              </p>
-            )}
+            {/* Textos */}
+            <div className="flex flex-col justify-start">
+              {/* Descrição da Empresa */}
+              {siteSettings?.site_description && (
+                <p className="text-white text-base leading-relaxed mb-4 max-w-md">
+                  {siteSettings.site_description}
+                </p>
+              )}
 
-            {/* Endereço */}
-            {footerSettings?.address && (
-              <p className="text-[15px] text-white leading-relaxed whitespace-pre-line text-left">
-                {footerSettings.address}
-              </p>
-            )}
+              {/* Endereço */}
+              {footerSettings?.address && (
+                <p className="text-white text-base leading-relaxed whitespace-pre-line">
+                  {footerSettings.address}
+                </p>
+              )}
+            </div>
           </div>
 
-          {/* Telefone e Email - Lado Direito */}
-          <div className="absolute top-0 right-0 flex flex-col items-end">
-            {/* Telefone */}
-            {footerSettings?.phone && (
-              <p className="text-lg text-white mb-2 text-right">
-                {footerSettings.phone}
-              </p>
-            )}
+          {/* Lado Direito - Contatos e Redes Sociais */}
+          <div className="flex flex-col items-end justify-between h-full min-h-[120px]">
+            {/* Contatos no Topo */}
+            <div className="flex flex-col items-end mb-4">
+              {footerSettings?.phone && (
+                <p className="text-white text-base mb-1">
+                  {footerSettings.phone}
+                </p>
+              )}
+              {footerSettings?.email && (
+                <a 
+                  href={`mailto:${footerSettings.email}`} 
+                  className="text-white text-base hover:underline"
+                >
+                  {footerSettings.email}
+                </a>
+              )}
+            </div>
 
-            {/* Email */}
-            {footerSettings?.email && (
-              <a 
-                href={`mailto:${footerSettings.email}`} 
-                className="text-lg text-white hover:underline text-right"
-              >
-                {footerSettings.email}
-              </a>
-            )}
-          </div>
-
-          {/* Redes Sociais - Bem no Canto Inferior Direito */}
-          <div className="absolute bottom-0 right-0 flex items-center gap-4">
-            {footerSettings?.linkedin && (
-              <a
-                href={footerSettings.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="w-8 h-8 text-gray-900" />
-              </a>
-            )}
-            {footerSettings?.instagram && (
-              <a
-                href={footerSettings.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-8 h-8 text-gray-900" />
-              </a>
-            )}
-            {footerSettings?.facebook && (
-              <a
-                href={footerSettings.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-8 h-8 text-gray-900" />
-              </a>
-            )}
-            {footerSettings?.youtube && (
-              <a
-                href={footerSettings.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-16 h-16 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="w-8 h-8 text-gray-900" />
-              </a>
-            )}
+            {/* Redes Sociais na Parte Inferior */}
+            <div className="flex items-center gap-3">
+              {footerSettings?.linkedin && (
+                <a
+                  href={footerSettings.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-6 h-6 text-gray-900" />
+                </a>
+              )}
+              {footerSettings?.instagram && (
+                <a
+                  href={footerSettings.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram className="w-6 h-6 text-gray-900" />
+                </a>
+              )}
+              {footerSettings?.facebook && (
+                <a
+                  href={footerSettings.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook className="w-6 h-6 text-gray-900" />
+                </a>
+              )}
+              {footerSettings?.youtube && (
+                <a
+                  href={footerSettings.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  aria-label="YouTube"
+                >
+                  <Youtube className="w-6 h-6 text-gray-900" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
