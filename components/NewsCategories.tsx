@@ -34,11 +34,11 @@ export default function NewsCategories() {
     <section className="bg-white py-12 md:py-16 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 tracking-tight inline-block">
+        <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center md:justify-between">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 md:mb-0 tracking-tight">
             Notícias
           </h2>
-          <span className="text-base md:text-lg text-gray-600 ml-4">
+          <span className="text-base md:text-lg text-gray-900 font-bold">
             Últimas notícias, movimentação do mercado e eventos.
           </span>
         </div>

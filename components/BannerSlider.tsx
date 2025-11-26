@@ -49,7 +49,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
 
   if (banners.length === 0) {
     return (
-      <div className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] min-h-[500px] bg-gradient-to-r from-dark-900 to-dark-800 flex items-center justify-center">
+      <div className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-[85vh] min-h-[600px] bg-gradient-to-r from-dark-900 to-dark-800 flex items-center justify-center">
         <div className="text-center text-white px-4">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 tracking-tight">
             <ABCIPText>ABCIP</ABCIPText>
@@ -73,7 +73,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
   const currentBanner = banners[currentIndex];
 
   return (
-    <div className="relative h-[60vh] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] min-h-[500px] overflow-hidden">
+    <div className="relative h-[70vh] sm:h-[75vh] md:h-[80vh] lg:h-[85vh] min-h-[600px] overflow-hidden">
       {banners.map((banner, index) => (
         <div
           key={banner.id}
