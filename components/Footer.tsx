@@ -5,25 +5,6 @@ import { createClient } from "@/lib/supabase/client";
 import { SiteSettings, FooterSettings } from "@/lib/types";
 import Image from "next/image";
 
-// Pequeno componente auxiliar para os ícones circulares (mantém consistência)
-function IconCircle({ children, href }: { children: React.ReactNode; href?: string }) {
-  const content = (
-    <div className="w-8 h-8 rounded-full bg-black/40 flex items-center justify-center hover:bg-black/60 transition-colors cursor-pointer">
-      {children}
-    </div>
-  );
-
-  if (href) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        {content}
-      </a>
-    );
-  }
-
-  return content;
-}
-
 export default function Footer() {
   const [footerSettings, setFooterSettings] = useState<FooterSettings | null>(null);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
@@ -57,124 +38,122 @@ export default function Footer() {
 
   return (
     <footer className="w-full">
-      {/* Container com imagem de fundo e overlay escuro sutil */}
       <div
-        className="relative w-full h-36 sm:h-44 md:h-52 lg:h-56 overflow-hidden bg-center bg-cover rounded-b-md"
+        className="relative w-full h-48 overflow-hidden bg-center bg-cover"
         style={{ 
           backgroundImage: footerSettings?.background_image_url 
             ? `url('${footerSettings.background_image_url}')` 
-            : `url('/images/Captura-de-Tela-footer.jpg')`
+            : `url('/images/footer-bg.jpg')`
         }}
-        aria-label="Rodapé ABCIP"
       >
-        {/* Overlay para escurecer a imagem (igual ao original) */}
+        {/* Overlay escuro */}
         <div className="absolute inset-0 bg-black/60" />
 
-        {/* Conteúdo do footer: três colunas (left / center / right) */}
-        <div className="relative z-10 max-w-7xl mx-auto h-full px-6 md:px-8 lg:px-12 flex items-center">
-          {/* Left: logo + título + descrição (alinhado à esquerda) */}
-          <div className="flex-1 flex items-start gap-4">
-            <div className="flex items-center gap-4">
-              {/* Logo do Supabase ou placeholder SVG */}
+        {/* Container principal */}
+        <div className="relative z-10 w-full h-full px-8 flex items-center">
+          {/* Lado Esquerdo - Logo e Textos */}
+          <div className="flex items-start gap-6">
+            {/* Logo */}
+            <div className="flex-shrink-0 mt-2">
               {siteSettings?.logo_white_url ? (
-                <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full">
-                  <div className="relative w-8 h-8">
-                    <Image
-                      src={siteSettings.logo_white_url}
-                      alt={siteSettings.site_name || "ABCIP"}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+                <div className="relative w-16 h-16">
+                  <Image
+                    src={siteSettings.logo_white_url}
+                    alt="ABCIP"
+                    fill
+                    className="object-contain"
+                  />
                 </div>
               ) : (
-                <div className="w-10 h-10 flex items-center justify-center bg-white/5 rounded-full">
-                  <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                    <circle cx="32" cy="32" r="32" fill="white" fillOpacity="0.06" />
-                    <g transform="translate(8 8)" fill="white">
-                      <circle cx="8" cy="8" r="6" fillOpacity="1" />
-                      <circle cx="30" cy="30" r="4" fillOpacity="1" />
-                    </g>
-                  </svg>
+                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-green-400 flex items-center justify-center">
+                    <div className="w-8 h-8 bg-white rounded-full"></div>
+                  </div>
                 </div>
               )}
+            </div>
 
-              <div className="text-white">
-                <div className="font-semibold text-lg md:text-xl tracking-tight">
-                  AB<span className="font-bold">CI</span>P
-                </div>
-                <div className="text-[11px] md:text-xs leading-tight mt-1 max-w-xs opacity-95">
-                  {siteSettings?.site_description || (
-                    <>
-                      Associação Brasileira das Concessionárias de
-                      <br /> Iluminação Pública e Cidades Inteligentes
-                    </>
-                  )}
-                </div>
+            {/* Textos ao lado do logo */}
+            <div className="text-white">
+              <div className="text-4xl font-bold mb-2 tracking-wide">
+                AB<span className="font-bold">CI</span>P
+              </div>
+              <div className="text-sm leading-tight mb-4 max-w-sm">
+                Associação Brasileira das Concessionárias<br />
+                de Iluminação Pública e Cidades Inteligentes
+              </div>
+              <div className="text-sm leading-tight">
+                Rua Augusta, 2840, 5º Andar<br />
+                São Paulo - SP - 01412-100
               </div>
             </div>
           </div>
 
-          {/* Center: endereço (centralizado verticalmente e posicionado mais ao centro) */}
-          <div className="flex-1 flex flex-col items-center text-center text-white">
-            {footerSettings?.address ? (
-              footerSettings.address.split('\n').map((line, index) => (
-                <div key={index} className={index === 0 ? "text-sm md:text-base font-medium" : "text-xs md:text-sm mt-1 opacity-90"}>
-                  {line}
-                </div>
-              ))
-            ) : (
-              <>
-                <div className="text-sm md:text-base font-medium">Rua Augusta, 2840, 5º Andar</div>
-                <div className="text-xs md:text-sm mt-1 opacity-90">São Paulo - SP - 01412-100</div>
-              </>
-            )}
-          </div>
-
-          {/* Right: ícones e contato (alinhado à direita) */}
-          <div className="flex-1 flex flex-col items-end">
-            <div className="flex items-center gap-3 mb-1">
-              {/* pequenos círculos escuros com ícones brancos — ordem: LinkedIn, Instagram, Facebook, YouTube */}
+          {/* Lado Direito - Ícones e Contatos */}
+          <div className="ml-auto flex flex-col items-end">
+            {/* Ícones das redes sociais */}
+            <div className="flex items-center gap-4 mb-6">
               {footerSettings?.linkedin && (
-                <IconCircle href={footerSettings.linkedin}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" className="text-white" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5z" fill="white"/>
-                    <path d="M6 8h4v12H6zM12 8h4v1.7c.6-1 2.2-2.1 4.5-2.1 4.8 0 5.5 3.2 5.5 7.4V20h-4v-6.5c0-1.6 0-3.6-2.2-3.6-2.2 0-2.5 1.7-2.5 3.5V20h-4V8z" fill="white"/>
+                <a
+                  href={footerSettings.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="#0A66C2"/>
                   </svg>
-                </IconCircle>
+                </a>
               )}
 
               {footerSettings?.instagram && (
-                <IconCircle href={footerSettings.instagram}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="3" width="18" height="18" rx="5" stroke="white" strokeWidth="1" />
-                    <circle cx="12" cy="12" r="3" stroke="white" strokeWidth="1" />
-                    <circle cx="17.5" cy="6.5" r="1" fill="white" />
+                <a
+                  href={footerSettings.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="#E4405F"/>
                   </svg>
-                </IconCircle>
+                </a>
               )}
 
               {footerSettings?.facebook && (
-                <IconCircle href={footerSettings.facebook}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 5 3.66 9.13 8.44 9.88v-6.99H7.9v-2.89h2.54V9.41c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.89h-2.34V21.9C18.34 21.13 22 17 22 12z" fill="white"/>
+                <a
+                  href={footerSettings.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="#1877F2"/>
                   </svg>
-                </IconCircle>
+                </a>
               )}
 
               {footerSettings?.youtube && (
-                <IconCircle href={footerSettings.youtube}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M23.5 6.2s-.2-1.7-.8-2.4c-.8-.9-1.7-.9-2.1-1C16.3 2 12 2 12 2s-4.3 0-8.6.8c-.4 0-1.3.1-2.1 1-.6.7-.8 2.4-.8 2.4S0 8 0 9.8v2.4C0 14 0.2 15.8.2 15.8s.2 1.7.8 2.4c.8.9 1.9.9 2.4 1 1.7.2 7.6.8 8.6.8s4.3 0 8.6-.8c.4 0 1.3-.1 2.1-1 .6-.7.8-2.4.8-2.4s.2-1.8.2-3.6v-2.4c0-1.8-.2-3.6-.2-3.6z" fill="white" />
-                    <path d="M9.6 15.1l5.2-3.1-5.2-3.1v6.2z" fill="#0b1220" />
+                <a
+                  href={footerSettings.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-colors"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" fill="#FF0000"/>
                   </svg>
-                </IconCircle>
+                </a>
               )}
             </div>
 
-            <div className="text-right text-sm md:text-base text-white">
-              <div className="font-medium">{footerSettings?.phone || "+55 11 91304 0730"}</div>
-              <div className="opacity-90">{footerSettings?.email || "contato@abcip.com.br"}</div>
+            {/* Contatos */}
+            <div className="text-white text-right">
+              <div className="text-lg font-medium mb-1">
+                {footerSettings?.phone || "+55 11 91304 0730"}
+              </div>
+              <div className="text-lg">
+                {footerSettings?.email || "contato@abcip.com.br"}
+              </div>
             </div>
           </div>
         </div>
