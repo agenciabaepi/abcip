@@ -52,32 +52,28 @@ export default function Footer() {
         {/* Container principal */}
         <div className="relative z-10 w-full h-full px-8 flex items-center">
           {/* Lado Esquerdo - Logo e Textos */}
-          <div className="flex items-start gap-6">
-            {/* Logo */}
-            <div className="flex-shrink-0 mt-2">
+          <div className="flex items-start">
+            {/* Logo ABCIP e textos */}
+            <div className="text-white">
+              {/* Logo ABCIP */}
               {siteSettings?.logo_white_url ? (
-                <div className="relative w-16 h-16">
-                  <Image
-                    src={siteSettings.logo_white_url}
-                    alt="ABCIP"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-green-400 flex items-center justify-center">
-                    <div className="w-8 h-8 bg-white rounded-full"></div>
+                <div className="mb-2">
+                  <div className="relative h-16 w-auto max-w-xs">
+                    <Image
+                      src={siteSettings.logo_white_url}
+                      alt="ABCIP"
+                      width={200}
+                      height={64}
+                      className="object-contain object-left"
+                    />
                   </div>
                 </div>
+              ) : (
+                <div className="text-4xl font-bold mb-2 tracking-wide">
+                  AB<span className="font-bold">CI</span>P
+                </div>
               )}
-            </div>
-
-            {/* Textos ao lado do logo */}
-            <div className="text-white">
-              <div className="text-4xl font-bold mb-2 tracking-wide">
-                AB<span className="font-bold">CI</span>P
-              </div>
+              
               <div className="text-sm leading-tight mb-4 max-w-sm">
                 Associação Brasileira das Concessionárias<br />
                 de Iluminação Pública e Cidades Inteligentes
