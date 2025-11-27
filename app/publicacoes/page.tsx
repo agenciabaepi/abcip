@@ -63,10 +63,10 @@ export default async function PublicacoesPage() {
             {/* Grid de Publicações */}
             <div className="space-y-16 md:space-y-20 lg:space-y-24">
               {publicacoes.map((pub) => (
-                <div key={pub.id} className="bg-gray-50 rounded-lg p-8 md:p-10 lg:p-12 flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12">
-                  {/* Imagem à esquerda */}
+                <div key={pub.id} className="bg-gray-100 rounded-lg p-8 md:p-10 lg:p-12 flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10">
+                  {/* Imagem à esquerda - QUADRADA */}
                   {pub.image_url && (
-                    <div className="relative w-full md:w-[38%] lg:w-[40%] aspect-[4/3] flex-shrink-0 overflow-hidden rounded-lg">
+                    <div className="relative w-full md:w-[35%] lg:w-[38%] aspect-square flex-shrink-0 overflow-hidden rounded-lg">
                       <Image
                         src={pub.image_url}
                         alt={pub.title}
@@ -78,12 +78,12 @@ export default async function PublicacoesPage() {
                   
                   {/* Conteúdo à direita */}
                   <div className="flex flex-col justify-start flex-1">
-                    <h3 className="font-archivo text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 uppercase leading-tight">
+                    <h3 className="font-archivo text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 uppercase leading-tight">
                       {pub.title}
                     </h3>
                     
                     {pub.description && (
-                      <p className="font-archivo text-sm md:text-base font-thin text-gray-700 leading-relaxed mb-6 text-justify">
+                      <p className="font-archivo text-base md:text-lg font-thin text-gray-700 leading-relaxed mb-6 text-justify">
                         {pub.description}
                       </p>
                     )}
