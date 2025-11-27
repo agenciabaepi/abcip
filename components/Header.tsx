@@ -83,10 +83,10 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 md:pr-6 lg:pr-8">
-        <div className="flex items-center h-24 sm:h-26 md:h-28 lg:h-32">
+        <div className="flex items-center justify-between h-24 sm:h-26 md:h-28 lg:h-32 w-full">
           {/* Logo - Esquerda */}
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center mr-4 sm:mr-8 md:mr-12 lg:mr-16">
+          <div className="flex items-center flex-shrink-0">
+            <Link href="/" className="flex items-center">
               {logoUrl ? (
                 <div className="relative h-16 sm:h-18 md:h-20 lg:h-24 w-auto">
                   <img
@@ -116,7 +116,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
           </div>
 
           {/* Desktop Navigation - Centro */}
-          <nav className="hidden lg:flex items-center justify-center flex-grow space-x-4 xl:space-x-6">
+          <nav className="hidden lg:flex items-center justify-center flex-1 space-x-4 xl:space-x-6 mx-8">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               const isDropdownOpen = openDropdown === link.href;
