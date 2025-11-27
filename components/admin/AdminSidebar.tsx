@@ -58,6 +58,7 @@ export default function AdminSidebar() {
     { href: "/admin/banners", label: "Banners", icon: Image },
     { href: "/admin/cta", label: "CTA Homepage", icon: Megaphone },
     { href: "/admin/videos", label: "Vídeos", icon: Video },
+    { href: "/admin/publicacoes", label: "Publicações", icon: FileText },
     { href: "/admin/associates", label: "Associados", icon: Users },
     { href: "/admin/about", label: "Quem Somos", icon: Info },
     { href: "/admin/board", label: "Diretoria", icon: Users },
