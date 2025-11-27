@@ -61,11 +61,12 @@ export default async function PublicacoesPage() {
             </div>
 
             {/* Grid de Publicações */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
+            <div className="space-y-12 md:space-y-16">
               {publicacoes.map((pub) => (
-                <div key={pub.id} className="flex flex-col">
+                <div key={pub.id} className="flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-10">
+                  {/* Imagem à esquerda */}
                   {pub.image_url && (
-                    <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
+                    <div className="relative w-full md:w-[45%] aspect-[4/3] flex-shrink-0 overflow-hidden rounded-lg">
                       <Image
                         src={pub.image_url}
                         alt={pub.title}
@@ -75,33 +76,36 @@ export default async function PublicacoesPage() {
                     </div>
                   )}
                   
-                  <h3 className="font-archivo text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 uppercase">
-                    {pub.title}
-                  </h3>
-                  
-                  {pub.description && (
-                    <p className="font-archivo text-base md:text-lg font-thin text-gray-700 leading-relaxed mb-4">
-                      {pub.description}
-                    </p>
-                  )}
+                  {/* Conteúdo à direita */}
+                  <div className="flex flex-col justify-center flex-1">
+                    <h3 className="font-archivo text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 uppercase">
+                      {pub.title}
+                    </h3>
+                    
+                    {pub.description && (
+                      <p className="font-archivo text-base md:text-lg font-thin text-gray-700 leading-relaxed mb-6">
+                        {pub.description}
+                      </p>
+                    )}
 
-                  {pub.file_url && (
-                    <a
-                      href={pub.file_url}
-                      download={pub.file_name}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-archivo font-medium transition-colors mt-auto"
-                    >
-                      <Download className="w-5 h-5" />
-                      Baixar Publicação
-                    </a>
-                  )}
+                    {pub.file_url && (
+                      <a
+                        href={pub.file_url}
+                        download={pub.file_name}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-archivo font-medium transition-colors"
+                      >
+                        <Download className="w-5 h-5" />
+                        Baixar Publicação
+                      </a>
+                    )}
+                  </div>
                 </div>
               ))}
 
               {publicacoes.length === 0 && (
-                <div className="col-span-2 text-center py-12">
+                <div className="text-center py-12">
                   <p className="font-archivo text-lg text-gray-500">
                     Nenhuma publicação disponível no momento.
                   </p>
