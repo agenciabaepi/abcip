@@ -52,13 +52,13 @@ export default function AdminPublicacoesPage() {
       const filePath = `banners/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("site-images")
+        .from("uploads")
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from("site-images")
+        .from("uploads")
         .getPublicUrl(filePath);
 
       // Se settings existe, atualiza, senão insere
