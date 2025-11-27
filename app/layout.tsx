@@ -11,7 +11,7 @@ const syne = Syne({
 
 const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["300"],
+  weight: ["300", "700"],
   variable: "--font-archivo",
   display: "swap",
 });

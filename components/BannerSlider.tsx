@@ -102,7 +102,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
             <div className="absolute top-1/2 left-0 -translate-y-1/2">
               {/* Retângulo azul semi-transparente no fundo do título, encostado no canto */}
               <div className="px-5 sm:px-7 md:px-9 lg:px-11 py-3 sm:py-4 md:py-5 lg:py-6" style={{ backgroundColor: 'rgba(12, 13, 43, 0.75)' }}>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight whitespace-nowrap">
+                <h1 className="font-archivo text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight whitespace-nowrap">
                   {banner.title}
                 </h1>
               </div>
