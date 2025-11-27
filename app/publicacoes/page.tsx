@@ -75,12 +75,12 @@ export default async function PublicacoesPage() {
                     </div>
                   )}
                   
-                  <h3 className="font-archivo text-xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
+                  <h3 className="font-archivo text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 uppercase">
                     {pub.title}
                   </h3>
                   
                   {pub.description && (
-                    <p className="font-archivo text-base md:text-lg font-light text-gray-700 leading-relaxed mb-4">
+                    <p className="font-archivo text-base md:text-lg font-thin text-gray-700 leading-relaxed mb-4">
                       {pub.description}
                     </p>
                   )}
