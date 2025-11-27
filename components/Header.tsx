@@ -82,25 +82,25 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto pr-4 sm:pr-6 lg:pr-8">
-        <div className="flex items-center h-28 md:h-32">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:pr-6 lg:pr-8">
+        <div className="flex items-center h-24 sm:h-26 md:h-28 lg:h-32">
           {/* Logo - Esquerda */}
-          <div className="flex items-center -ml-4 sm:-ml-6 lg:-ml-8">
-            <Link href="/" className="flex items-center mr-16">
+          <div className="flex items-center">
+            <Link href="/" className="flex items-center mr-4 sm:mr-8 md:mr-12 lg:mr-16">
               {logoUrl ? (
-                <div className="relative h-20 md:h-24 w-auto">
+                <div className="relative h-16 sm:h-18 md:h-20 lg:h-24 w-auto">
                   <img
                     src={logoUrl}
                     alt={siteName}
                     className="h-full w-auto object-contain"
-                    style={{ maxWidth: "350px" }}
+                    style={{ maxWidth: "250px" }}
                     onError={(e) => {
                       // Se o logo falhar ao carregar, mostra o texto
                       e.currentTarget.style.display = "none";
                       const parent = e.currentTarget.parentElement;
                       if (parent) {
                         const fallback = document.createElement("span");
-                        fallback.className = "text-4xl md:text-5xl font-bold text-dark-900 tracking-tight";
+                        fallback.className = "text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-dark-900 tracking-tight";
                         fallback.textContent = siteName;
                         parent.appendChild(fallback);
                       }
@@ -108,7 +108,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                   />
                 </div>
               ) : (
-                <span className="text-4xl md:text-5xl font-bold text-dark-900 tracking-tight">
+                <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-dark-900 tracking-tight">
                   <ABCIPText>{siteName}</ABCIPText>
                 </span>
               )}
@@ -116,7 +116,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
           </div>
 
           {/* Desktop Navigation - Centro */}
-          <nav className="hidden lg:flex items-center justify-center flex-grow space-x-6 xl:space-x-8">
+          <nav className="hidden lg:flex items-center justify-center flex-grow space-x-4 xl:space-x-6">
             {navLinks.map((link) => {
               const active = isActive(link.href);
               const isDropdownOpen = openDropdown === link.href;
@@ -131,14 +131,14 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                   >
                     <Link
                       href={link.href}
-                      className={`text-2xl font-medium transition-colors relative pb-1 whitespace-nowrap flex items-center gap-1 ${
+                      className={`text-lg xl:text-2xl font-medium transition-colors relative pb-1 whitespace-nowrap flex items-center gap-1 ${
                         active
                           ? "text-primary-400"
                           : "text-dark-900"
                       }`}
                     >
                       {link.label}
-                      <ChevronDown className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-3 h-3 xl:w-4 xl:h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
                       {active && (
                         <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-dark-900"></span>
                       )}
@@ -167,7 +167,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-2xl font-medium transition-colors relative pb-1 whitespace-nowrap ${
+                  className={`text-lg xl:text-2xl font-medium transition-colors relative pb-1 whitespace-nowrap ${
                     active
                       ? "text-primary-400"
                       : "text-dark-900"
@@ -183,7 +183,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
           </nav>
 
           {/* Desktop Search - Direita */}
-          <div className="flex items-center justify-end flex-1">
+          <div className="flex items-center justify-end flex-shrink-0 ml-2">
             <form onSubmit={handleSearch} className="hidden md:flex items-center">
               <div className="relative">
                 <input
@@ -191,7 +191,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar..."
-                  className="w-48 lg:w-64 pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50"
+                  className="w-32 lg:w-48 xl:w-64 pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-gray-50"
                 />
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               </div>
