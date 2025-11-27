@@ -131,7 +131,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                   >
                     <Link
                       href={link.href}
-                      className={`font-archivo text-lg xl:text-2xl font-light transition-colors relative pb-1 whitespace-nowrap flex items-center gap-1 ${
+                      className={`font-archivo text-lg xl:text-2xl font-bold transition-colors relative pb-1 whitespace-nowrap flex items-center gap-1 ${
                         active
                           ? "text-primary-400"
                           : "text-dark-900"
@@ -167,7 +167,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`font-archivo text-lg xl:text-2xl font-light transition-colors relative pb-1 whitespace-nowrap ${
+                  className={`font-archivo text-lg xl:text-2xl font-bold transition-colors relative pb-1 whitespace-nowrap ${
                     active
                       ? "text-primary-400"
                       : "text-dark-900"
@@ -251,7 +251,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                     <div key={link.href}>
                       <button
                         onClick={() => setOpenDropdown(isMobileDropdownOpen ? null : `mobile-${link.href}`)}
-                        className={`font-archivo w-full px-4 py-3 text-xl font-light rounded-lg transition-colors flex items-center justify-between ${
+                        className={`font-archivo w-full px-4 py-3 text-xl font-bold rounded-lg transition-colors flex items-center justify-between ${
                           active
                             ? "text-primary-400 bg-primary-50"
                             : "text-dark-900 hover:bg-gray-50"
@@ -290,7 +290,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`font-archivo px-4 py-3 text-xl font-light rounded-lg transition-colors flex items-center gap-2 ${
+                    className={`font-archivo px-4 py-3 text-xl font-bold rounded-lg transition-colors flex items-center gap-2 ${
                       active
                         ? "text-primary-400 bg-primary-50"
                         : "text-dark-900 hover:bg-gray-50"
