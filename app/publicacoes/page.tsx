@@ -63,10 +63,10 @@ export default async function PublicacoesPage() {
             {/* Grid de Publicações */}
             <div className="space-y-16 md:space-y-20 lg:space-y-24">
               {publicacoes.map((pub) => (
-                <div key={pub.id} className="flex flex-col md:flex-row gap-8 md:gap-10 lg:gap-12">
+                <div key={pub.id} className="bg-gray-50 rounded-lg p-8 md:p-10 lg:p-12 flex flex-col md:flex-row gap-6 md:gap-8 lg:gap-12">
                   {/* Imagem à esquerda */}
                   {pub.image_url && (
-                    <div className="relative w-full md:w-[48%] lg:w-[50%] aspect-[4/3] flex-shrink-0 overflow-hidden rounded-lg">
+                    <div className="relative w-full md:w-[38%] lg:w-[40%] aspect-[4/3] flex-shrink-0 overflow-hidden rounded-lg">
                       <Image
                         src={pub.image_url}
                         alt={pub.title}
@@ -77,8 +77,8 @@ export default async function PublicacoesPage() {
                   )}
                   
                   {/* Conteúdo à direita */}
-                  <div className="flex flex-col justify-start flex-1 pt-0 md:pt-4">
-                    <h3 className="font-archivo text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 uppercase leading-tight">
+                  <div className="flex flex-col justify-start flex-1">
+                    <h3 className="font-archivo text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 uppercase leading-tight">
                       {pub.title}
                     </h3>
                     
