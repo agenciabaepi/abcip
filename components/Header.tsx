@@ -70,7 +70,7 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
       label: "notícias", 
       hasDropdown: true,
       dropdownItems: [
-        { href: "/noticias", label: "Todas as Notícias" },
+        { href: "/publicacoes", label: "Publicações" },
         { href: "/noticias/videos", label: "Vídeos" },
       ]
     },
