@@ -30,8 +30,8 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
 
           {/* Conteúdo - Sempre à direita */}
           <div className={`relative z-10 order-2 ${!cta.image_url ? 'lg:col-span-2' : ''}`}>
-            <div className="space-y-6">
-              <h2 className={`font-archivo text-3xl md:text-4xl lg:text-5xl font-bold leading-tight ${isLeft ? 'text-gray-900' : 'text-white'}`}>
+            <div className="space-y-4">
+              <h2 className={`font-archivo text-2xl md:text-3xl lg:text-4xl font-bold leading-tight ${isLeft ? 'text-gray-900' : 'text-white'}`}>
                 {isLeft ? (
                   cta.title
                 ) : (
@@ -39,7 +39,7 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                 )}
               </h2>
               
-              <p className={`font-archivo text-lg md:text-xl font-light leading-relaxed ${isLeft ? 'text-gray-700' : 'text-gray-200'}`}>
+              <p className={`font-archivo text-base md:text-lg lg:text-xl font-light leading-relaxed ${isLeft ? 'text-gray-700' : 'text-gray-200'}`}>
                 {isLeft ? (
                   cta.description
                 ) : (
@@ -132,13 +132,13 @@ export default function CTASection({ cta }: CTASectionProps) {
           )}
 
           <div className={`order-1 lg:order-2 relative z-10 ${!cta.image_url ? 'lg:col-span-2 text-center' : ''}`}>
-            <h2 className="font-archivo text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-lg">
+            <h2 className="font-archivo text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3 leading-tight tracking-tight drop-shadow-lg">
               <span className="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
                 {cta.title}
               </span>
             </h2>
             
-            <p className="font-archivo text-base md:text-lg font-light text-gray-200 mb-6 leading-relaxed max-w-2xl drop-shadow-md">
+            <p className="font-archivo text-sm md:text-base lg:text-lg font-light text-gray-200 mb-6 leading-relaxed max-w-2xl drop-shadow-md">
               {cta.description}
             </p>
 
