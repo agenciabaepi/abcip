@@ -35,10 +35,10 @@ export default function NewsCategories() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-center md:justify-between">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 md:mb-0 tracking-tight">
+          <h2 className="font-archivo text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 md:mb-0 tracking-tight">
             Notícias
           </h2>
-          <span className="text-base md:text-lg text-gray-900 font-bold">
+          <span className="font-archivo text-base md:text-lg text-gray-900 font-bold">
             Últimas notícias, movimentação do mercado e eventos.
           </span>
         </div>
@@ -50,7 +50,7 @@ export default function NewsCategories() {
             
             const content = (
               <>
-                <h3 className={`text-base md:text-lg font-semibold text-gray-900 mb-3 ${isClickable ? 'group-hover:text-primary-500' : ''} transition-colors`}>
+                <h3 className={`font-archivo text-base md:text-lg font-semibold text-gray-900 mb-3 ${isClickable ? 'group-hover:text-primary-500' : ''} transition-colors`}>
                   {category.id === 4 ? (
                     <ABCIPText>{category.title}</ABCIPText>
                   ) : (
