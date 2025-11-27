@@ -154,10 +154,21 @@ export default function AdminPublicacoesPage() {
     try {
       const supabase = createClient();
       
+      // Prepara os dados removendo campos undefined
+      const dataToSave = {
+        title: formData.title,
+        description: formData.description || null,
+        image_url: formData.image_url || null,
+        file_url: formData.file_url || null,
+        file_name: formData.file_name || null,
+        order: formData.order || 0,
+        active: formData.active !== undefined ? formData.active : true,
+      };
+      
       if (editingId) {
         const { error } = await supabase
           .from("publicacoes")
-          .update({ ...formData, updated_at: new Date().toISOString() })
+          .update({ ...dataToSave, updated_at: new Date().toISOString() })
           .eq("id", editingId);
 
         if (error) throw error;
@@ -165,7 +176,7 @@ export default function AdminPublicacoesPage() {
       } else {
         const { error } = await supabase
           .from("publicacoes")
-          .insert([formData]);
+          .insert([dataToSave]);
 
         if (error) throw error;
         toast.success("Publicação criada!");
@@ -173,10 +184,10 @@ export default function AdminPublicacoesPage() {
 
       setEditingId(null);
       setFormData({ title: "", description: "", order: 0, active: true });
-      loadData();
-    } catch (error) {
+      await loadData();
+    } catch (error: any) {
       console.error("Erro ao salvar:", error);
-      toast.error("Erro ao salvar publicação");
+      toast.error(`Erro: ${error.message || "Erro ao salvar publicação"}`);
     }
   }
 
@@ -189,10 +200,10 @@ export default function AdminPublicacoesPage() {
 
       if (error) throw error;
       toast.success("Publicação excluída!");
-      loadData();
-    } catch (error) {
+      await loadData();
+    } catch (error: any) {
       console.error("Erro ao excluir:", error);
-      toast.error("Erro ao excluir publicação");
+      toast.error(`Erro: ${error.message || "Erro ao excluir publicação"}`);
     }
   }
 
