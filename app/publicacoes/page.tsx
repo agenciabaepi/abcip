@@ -61,12 +61,12 @@ export default async function PublicacoesPage() {
             </div>
 
             {/* Grid de Publicações */}
-            <div className="space-y-12 md:space-y-16 lg:space-y-20">
+            <div className="space-y-8 md:space-y-10 lg:space-y-12">
               {publicacoes.map((pub) => (
                 <div key={pub.id} className="flex flex-col md:flex-row gap-0">
-                  {/* Imagem à esquerda - QUADRADA - SEM fundo */}
+                  {/* Imagem à esquerda - QUADRADA - SEM fundo - MENOR */}
                   {pub.image_url && (
-                    <div className="relative w-full md:w-[45%] aspect-square flex-shrink-0 overflow-hidden">
+                    <div className="relative w-full md:w-[35%] aspect-square flex-shrink-0 overflow-hidden">
                       <Image
                         src={pub.image_url}
                         alt={pub.title}
@@ -76,14 +76,14 @@ export default async function PublicacoesPage() {
                     </div>
                   )}
                   
-                  {/* Conteúdo à direita - COM fundo cinza - GRUDADO na imagem */}
-                  <div className="flex flex-col justify-center flex-1 bg-gray-200 p-8 md:p-10 lg:p-12">
-                    <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-4 uppercase leading-tight">
+                  {/* Conteúdo à direita - COM fundo cinza - GRUDADO na imagem - MENOR */}
+                  <div className="flex flex-col justify-center flex-1 bg-gray-200 p-4 md:p-6 lg:p-8">
+                    <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
                       {pub.title}
                     </h3>
                     
                     {pub.description && (
-                      <p className="font-archivo text-sm md:text-sm lg:text-base font-normal text-black leading-normal text-justify">
+                      <p className="font-archivo text-xs md:text-sm lg:text-base font-normal text-black leading-normal text-justify">
                         {pub.description}
                       </p>
                     )}
@@ -94,9 +94,9 @@ export default async function PublicacoesPage() {
                         download={pub.file_name}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-archivo font-medium transition-colors mt-6"
+                        className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-archivo font-medium transition-colors mt-4"
                       >
-                        <Download className="w-5 h-5" />
+                        <Download className="w-4 h-4" />
                         Baixar Publicação
                       </a>
                     )}
