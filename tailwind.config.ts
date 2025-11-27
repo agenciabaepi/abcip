@@ -9,7 +9,19 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Arial', 'sans-serif'],
+        sans: ['var(--font-syne)', 'Helvetica', 'Arial', 'sans-serif'],
+        mono: ['var(--font-azeret-mono)', 'Courier New', 'monospace'],
+      },
+      fontSize: {
+        'h1': ['54px', { lineHeight: '1.2', fontWeight: '700' }],
+        'h2': ['46px', { lineHeight: '1.2', fontWeight: '700' }],
+        'h3': ['34px', { lineHeight: '1.3', fontWeight: '600' }],
+        'h4': ['28px', { lineHeight: '1.3', fontWeight: '600' }],
+        'h5': ['19px', { lineHeight: '1.4', fontWeight: '600' }],
+        'h6': ['14px', { lineHeight: '1.4', fontWeight: '600' }],
+        'p1': ['18px', { lineHeight: '1.6', fontWeight: '400' }],
+        'p2': ['16px', { lineHeight: '1.6', fontWeight: '400' }],
+        'p3': ['14px', { lineHeight: '1.6', fontWeight: '400' }],
       },
       colors: {
         primary: {

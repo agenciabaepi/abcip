@@ -15,9 +15,38 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-start-rgb));
-  font-family: Arial, sans-serif;
+  font-family: var(--font-syne), Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Estilos de tipografia padrão */
+h1 {
+  @apply text-h1;
+}
+
+h2 {
+  @apply text-h2;
+}
+
+h3 {
+  @apply text-h3;
+}
+
+h4 {
+  @apply text-h4;
+}
+
+h5 {
+  @apply text-h5;
+}
+
+h6 {
+  @apply text-h6;
+}
+
+p {
+  @apply text-p2;
 }
 
 @layer utilities {
@@ -37,23 +66,35 @@ body {
 .prose h4,
 .prose h5,
 .prose h6 {
-  @apply font-bold text-gray-900 mt-6 mb-4;
+  @apply text-gray-900 mt-6 mb-4;
 }
 
 .prose h1 {
-  @apply text-3xl;
+  @apply text-h1;
 }
 
 .prose h2 {
-  @apply text-2xl;
+  @apply text-h2;
 }
 
 .prose h3 {
-  @apply text-xl;
+  @apply text-h3;
+}
+
+.prose h4 {
+  @apply text-h4;
+}
+
+.prose h5 {
+  @apply text-h5;
+}
+
+.prose h6 {
+  @apply text-h6;
 }
 
 .prose p {
-  @apply mb-4 leading-relaxed;
+  @apply text-p2 mb-4;
 }
 
 .prose a {
