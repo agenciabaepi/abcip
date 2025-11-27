@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import { Syne, Azeret_Mono } from "next/font/google";
+import { Syne, Azeret_Mono, Archivo } from "next/font/google";
 
 const syne = Syne({
   subsets: ["latin"],
   variable: "--font-syne",
+  display: "swap",
+});
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["300"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -26,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${syne.variable} ${azeretMono.variable}`}>
+    <html lang="pt-BR" className={`${syne.variable} ${archivo.variable} ${azeretMono.variable}`}>
       <body className="antialiased">
         {children}
         <Toaster position="top-right" />

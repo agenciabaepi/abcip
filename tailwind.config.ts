@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-syne)', 'Helvetica', 'Arial', 'sans-serif'],
+        archivo: ['var(--font-archivo)', 'Helvetica', 'Arial', 'sans-serif'],
         mono: ['var(--font-azeret-mono)', 'Courier New', 'monospace'],
       },
       fontSize: {
