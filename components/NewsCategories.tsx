@@ -58,7 +58,7 @@ export default function NewsCategories() {
                   )}
                 </h3>
                 <div className="relative overflow-hidden rounded-lg">
-                  <div className={`relative h-64 md:h-72 lg:h-80 w-full ${isClickable ? 'group-hover:scale-105' : ''} transition-transform duration-300`}>
+                  <div className={`relative aspect-square w-full ${isClickable ? 'group-hover:scale-105' : ''} transition-transform duration-300`}>
                     <Image
                       src={category.image}
                       alt={category.title}
