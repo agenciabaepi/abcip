@@ -50,7 +50,7 @@ export default function NewsCategories() {
             
             const content = (
               <>
-                <h3 className={`font-archivo text-xl md:text-2xl lg:text-3xl font-light text-gray-900 mb-4 ${isClickable ? 'group-hover:text-primary-500' : ''} transition-colors`}>
+                <h3 className={`font-archivo text-lg md:text-xl lg:text-2xl font-light text-gray-900 mb-4 ${isClickable ? 'group-hover:text-primary-500' : ''} transition-colors`}>
                   {category.id === 4 ? (
                     <ABCIPText>{category.title}</ABCIPText>
                   ) : (
