@@ -32,7 +32,7 @@ const categories = [
 export default function NewsCategories() {
   return (
     <section className="bg-white py-16 md:py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-10 md:mb-14 lg:mb-16 flex flex-col md:flex-row md:items-center md:justify-between">
           <h2 className="font-archivo text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 md:mb-0 tracking-tight">
