@@ -1,110 +1,45 @@
-export interface Post {
-  id: string;
-  title: string;
-  content: string;
-  cover_image?: string;
-  excerpt?: string;
-  published: boolean;
-  external_link?: string;
-  publish_date?: string;
-  author?: string;
-  views?: number;
-  likes?: number;
-  shares?: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface Banner {
-  id: string;
-  image_url: string;
-  title?: string;
-  subtitle?: string;
-  link?: string;
-  order: number;
-  enable_zoom?: boolean;
-  created_at: string;
-}
-
-export interface Associate {
-  id: string;
-  name: string;
-  logo_url: string;
-  website?: string;
-  created_at: string;
-}
-
-export interface AboutPage {
-  id: string;
-  title: string;
-  content: string;
-  image_url?: string;
-  banner_image?: string;
-  updated_at: string;
-}
-
-export interface TeamMember {
-  id: string;
-  name: string;
-  position: string;
-  bio?: string;
-  photo_url?: string;
-  email?: string;
-  linkedin?: string;
-  order: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface BoardMember {
-  id: string;
-  name: string;
-  position: string;
-  bio?: string;
-  photo_url?: string;
-  email?: string;
-  linkedin?: string;
-  order: number;
-  created_at: string;
-  updated_at: string;
+export interface SiteSettings {
+  id?: string;
+  site_name: string;
+  site_description?: string;
+  logo_url?: string;
+  logo_white_url?: string;
+  favicon_url?: string;
+  primary_color?: string;
+  secondary_color?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface FooterSettings {
-  id: string;
+  id?: string;
   address?: string;
   phone?: string;
   email?: string;
   facebook?: string;
   instagram?: string;
   linkedin?: string;
-  twitter?: string;
   youtube?: string;
-  links?: string; // JSON string
   background_image_url?: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export interface SiteSettings {
+export interface Banner {
   id: string;
-  site_name: string;
-  site_description?: string;
-  contact_email?: string;
-  logo_url?: string;
-  logo_white_url?: string;
-  updated_at: string;
-}
-
-export interface ContactMessage {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  message: string;
-  created_at: string;
+  title?: string;
+  subtitle?: string;
+  image_url: string;
+  link?: string;
+  order: number;
+  active: boolean;
+  enable_zoom?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CTASection {
-  id: string;
+  id?: string;
   title: string;
   description: string;
   button_text: string;
@@ -117,23 +52,28 @@ export interface CTASection {
   cta2_description?: string;
   cta2_button_text?: string;
   cta2_button_link?: string;
-  cta2_image_url?: string;
-  cta2_background_color?: string;
-  cta2_text_color?: string;
   cta2_button_color?: string;
-  created_at: string;
-  updated_at: string;
+  cta2_image_url?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
-export interface Video {
+export interface Publicacao {
   id: string;
   title: string;
   description?: string;
-  youtube_url: string;
-  thumbnail_url?: string;
-  order_index: number;
+  image_url?: string;
+  file_url?: string;
+  file_name?: string;
+  order: number;
   active: boolean;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
+export interface PublicacoesPageSettings {
+  id?: string;
+  banner_image_url?: string;
+  created_at?: string;
+  updated_at?: string;
+}

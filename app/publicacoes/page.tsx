@@ -2,28 +2,51 @@ import { Metadata } from "next";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase/server";
+import { Download } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Publicações ABCIP",
   description: "Publicações e materiais da ABCIP",
 };
 
-export default function PublicacoesPage() {
+export default async function PublicacoesPage() {
+  let settings: any = null;
+  let publicacoes: any[] = [];
+
+  try {
+    const supabase = await createClient();
+    const [settingsRes, publicacoesRes] = await Promise.all([
+      supabase.from("publicacoes_page_settings").select("*").single(),
+      supabase
+        .from("publicacoes")
+        .select("*")
+        .eq("active", true)
+        .order("order", { ascending: true }),
+    ]);
+
+    settings = settingsRes.data;
+    publicacoes = publicacoesRes.data || [];
+  } catch (error) {
+    console.error("Erro ao carregar publicações:", error);
+  }
   return (
     <div className="min-h-screen flex flex-col">
       <HeaderWrapper />
       
       <main className="flex-grow bg-white">
         {/* Banner da Página */}
-        <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] min-h-[300px] w-full overflow-hidden">
-          <Image
-            src="/imagens/banner-publicacoes.jpg"
-            alt="Banner Publicações"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
+        {settings?.banner_image_url && (
+          <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] min-h-[300px] w-full overflow-hidden">
+            <Image
+              src={settings.banner_image_url}
+              alt="Banner Publicações"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
 
         {/* Header Section */}
         <section className="py-12 md:py-16 lg:py-20">
@@ -39,77 +62,51 @@ export default function PublicacoesPage() {
 
             {/* Grid de Publicações */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
-              {/* Publicação 1 */}
-              <div className="flex flex-col">
-                <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
-                  <Image
-                    src="/imagens/publicacao-1.png"
-                    alt="Levantamento mostra vigor na expansão"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-archivo text-xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
-                  LEVANTAMENTO MOSTRA VIGOR NA EXPANSÃO DA ILUMINAÇÃO PÚBLICA DE QUALIDADE NO PAÍS
-                </h3>
-                <p className="font-archivo text-base md:text-lg font-light text-gray-700 leading-relaxed">
-                  Mais de 57 milhões de brasileiros, ou seja, 27% da população, vêm sendo beneficiados com iluminação pública de melhor qualidade graças à modernização dos parques municipais de IP por meio da parceria público-privada. Hoje, 146 contratos de PPP no valor de R$ 32 bilhões permite a implantação de 5 milhões de pontos de luz de tecnologia LED em 173 municípios, reduzindo drasticamente o consumo de energia, aumentando a segurança pública e mobilidade, permitindo a ocupação dos espaços públicos no período noturno.
-                </p>
-              </div>
+              {publicacoes.map((pub) => (
+                <div key={pub.id} className="flex flex-col">
+                  {pub.image_url && (
+                    <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
+                      <Image
+                        src={pub.image_url}
+                        alt={pub.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  
+                  <h3 className="font-archivo text-xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
+                    {pub.title}
+                  </h3>
+                  
+                  {pub.description && (
+                    <p className="font-archivo text-base md:text-lg font-light text-gray-700 leading-relaxed mb-4">
+                      {pub.description}
+                    </p>
+                  )}
 
-              {/* Publicação 2 */}
-              <div className="flex flex-col">
-                <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
-                  <Image
-                    src="/imagens/publicacao-2.jpeg"
-                    alt="Panorama Setorial 2024"
-                    fill
-                    className="object-cover"
-                  />
+                  {pub.file_url && (
+                    <a
+                      href={pub.file_url}
+                      download={pub.file_name}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-archivo font-medium transition-colors mt-auto"
+                    >
+                      <Download className="w-5 h-5" />
+                      Baixar Publicação
+                    </a>
+                  )}
                 </div>
-                <h3 className="font-archivo text-xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
-                  PANORAMA SETORIAL DA ILUMINAÇÃO PÚBLICA PRIVADA 2024
-                </h3>
-                <p className="font-archivo text-base md:text-lg font-light text-gray-700 leading-relaxed">
-                  Hoje 138 municípios brasileiros estão modernizando seus parques de iluminação por meio da concessão dos serviços para empresas privadas, beneficiando 52 milhões de habitantes. Os 116 contratos no valor de R$ 27 bilhões permitirão a implantação de 4,2 milhões de pontos de luz de tecnologia LED, reduzindo drasticamente o consumo de energia, melhorando a qualidade de vida da população em termos de conforto, ocupação dos espaços públicos no período da noite, de segurança pública e mobilidade.
-                </p>
-              </div>
+              ))}
 
-              {/* Publicação 3 */}
-              <div className="flex flex-col">
-                <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
-                  <Image
-                    src="/imagens/publicacao-3.jpeg"
-                    alt="Guia da Telegestão"
-                    fill
-                    className="object-cover"
-                  />
+              {publicacoes.length === 0 && (
+                <div className="col-span-2 text-center py-12">
+                  <p className="font-archivo text-lg text-gray-500">
+                    Nenhuma publicação disponível no momento.
+                  </p>
                 </div>
-                <h3 className="font-archivo text-xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
-                  EDIÇÃO ATUALIZA ESPECIFICAÇÕES TÉCNICAS PARA A TELEGESTÃO DAS REDES DE IP
-                </h3>
-                <p className="font-archivo text-base md:text-lg font-light text-gray-700 leading-relaxed">
-                  A terceira edição do Guia da Telegestão na Iluminação Pública, da ABCIP, inclui informações sobre a telegestão no contexto das cidades inteligentes e da iluminação adaptativa (dimerização). Elaborado com a colaboração de profissionais de 16 empresas associadas à ABCIP, a publicação é um guia essencial para gestores públicos e estruturadores de projetos de Parcerias Público-Privadas (PPP).
-                </p>
-              </div>
-
-              {/* Publicação 4 */}
-              <div className="flex flex-col">
-                <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
-                  <Image
-                    src="/imagens/publicacao-4.jpeg"
-                    alt="Estudo dimensiona parque nacional"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="font-archivo text-xl md:text-2xl font-bold text-gray-900 mb-4 uppercase">
-                  ESTUDO INÉDITO DIMENSIONA O PARQUE NACIONAL DE ILUMINAÇÃO
-                </h3>
-                <p className="font-archivo text-base md:text-lg font-light text-gray-700 leading-relaxed">
-                  O Brasil tem hoje mais de 22 milhões de pontos de iluminação pública (IP) instalados nos parques dos municípios, que consomem em média 14.500 GWH de energia. Desse total de pontos de IP, apenas 19,6% das luminárias usam tecnologia LED, a mais eficiente. O potencial de eficiência energética e de redução de CO2 emitido na atmosfera com a modernização dos parques de IP utilizando a tecnologia LED pode proporcionar uma economia de energia elétrica entre 40 e 70% em relação às tecnologias anteriores.
-                </p>
-              </div>
+              )}
             </div>
           </div>
         </section>
