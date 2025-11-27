@@ -98,13 +98,13 @@ export default function AdminPublicacoesPage() {
       const filePath = `publicacoes/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("site-images")
+        .from("uploads")
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from("site-images")
+        .from("uploads")
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
@@ -126,13 +126,13 @@ export default function AdminPublicacoesPage() {
       const filePath = `publicacoes-files/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from("site-files")
+        .from("uploads")
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from("site-files")
+        .from("uploads")
         .getPublicUrl(filePath);
 
       setFormData(prev => ({ ...prev, file_url: publicUrl, file_name: file.name }));
