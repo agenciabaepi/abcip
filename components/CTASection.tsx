@@ -51,7 +51,7 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                 {cta.button_link ? (
                   <Link
                     href={cta.button_link}
-                    className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                    className="group inline-flex items-center justify-center px-8 py-2.5 font-semibold text-base text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
                     style={{
                       backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : (cta.cta2_button_color || '#5FE074')
                     }}
@@ -60,7 +60,7 @@ function SingleCTA({ cta, isLeft = false }: { cta: CTASectionType; isLeft?: bool
                   </Link>
                 ) : (
                   <div 
-                    className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full shadow-md opacity-75 cursor-not-allowed"
+                    className="inline-flex items-center justify-center px-8 py-2.5 font-semibold text-base text-white rounded-full shadow-md opacity-75 cursor-not-allowed"
                     style={{
                       backgroundColor: isLeft ? (cta.cta1_button_color || '#3b82f6') : (cta.cta2_button_color || '#5FE074')
                     }}
@@ -145,7 +145,7 @@ export default function CTASection({ cta }: CTASectionProps) {
             {cta.button_link ? (
               <Link
                 href={cta.button_link}
-                className="group inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
+                className="group inline-flex items-center justify-center px-8 py-2.5 font-semibold text-base text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform"
                 style={{
                   backgroundColor: cta.cta1_button_color || '#5FE074'
                 }}
@@ -154,7 +154,7 @@ export default function CTASection({ cta }: CTASectionProps) {
               </Link>
             ) : (
               <div 
-                className="inline-flex items-center justify-center px-8 py-4 font-semibold text-lg text-white rounded-full shadow-md opacity-75 cursor-not-allowed"
+                className="inline-flex items-center justify-center px-8 py-2.5 font-semibold text-base text-white rounded-full shadow-md opacity-75 cursor-not-allowed"
                 style={{
                   backgroundColor: cta.cta1_button_color || '#5FE074'
                 }}
