@@ -61,17 +61,29 @@ export default function AdminPublicacoesPage() {
         .from("site-images")
         .getPublicUrl(filePath);
 
-      const { error: updateError } = await supabase
-        .from("publicacoes_page_settings")
-        .upsert({ id: settings?.id, banner_image_url: publicUrl, updated_at: new Date().toISOString() });
+      // Se settings existe, atualiza, senão insere
+      let updateError;
+      if (settings?.id) {
+        const { error } = await supabase
+          .from("publicacoes_page_settings")
+          .update({ banner_image_url: publicUrl, updated_at: new Date().toISOString() })
+          .eq("id", settings.id);
+        updateError = error;
+      } else {
+        const { error } = await supabase
+          .from("publicacoes_page_settings")
+          .insert({ banner_image_url: publicUrl });
+        updateError = error;
+      }
 
       if (updateError) throw updateError;
 
-      setSettings(prev => prev ? { ...prev, banner_image_url: publicUrl } : null);
+      // Recarrega os dados
+      await loadData();
       toast.success("Banner atualizado!");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Erro ao fazer upload:", error);
-      toast.error("Erro ao fazer upload do banner");
+      toast.error(`Erro: ${error.message || "Erro ao fazer upload do banner"}`);
     } finally {
       setUploadingBanner(false);
     }
