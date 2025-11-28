@@ -76,8 +76,8 @@ export default async function PublicacoesPage() {
                     </div>
                   )}
                   
-                  {/* Conteúdo à direita - COM fundo cinza - GRUDADO na imagem - MENOR */}
-                  <div className="flex flex-col justify-center flex-1 bg-gray-200 p-4 md:p-6 lg:p-8">
+                  {/* Conteúdo à direita - COM fundo cinza - GRUDADO na imagem - ALTURA FIXA: 290px */}
+                  <div className="flex flex-col justify-center flex-1 bg-gray-200 p-4 md:p-6 lg:p-8 h-[290px]">
                     <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
                       {pub.title}
                     </h3>
