@@ -62,7 +62,7 @@ export default async function PublicacoesPage() {
             {/* Grid de Publicações */}
             <div className="space-y-8 md:space-y-10 lg:space-y-12">
               {publicacoes.map((pub) => (
-                <div key={pub.id} className="flex flex-col md:flex-row gap-0">
+                <div key={pub.id} className="flex flex-col md:flex-row gap-0 items-start">
                   {/* Imagem à esquerda - TAMANHO FIXO: 328px x 290px - CLICÁVEL */}
                   {pub.image_url && (
                     <div className="relative w-full md:w-[328px] h-[290px] flex-shrink-0 overflow-hidden">
@@ -91,8 +91,8 @@ export default async function PublicacoesPage() {
                     </div>
                   )}
                   
-                  {/* Conteúdo à direita - COM fundo cinza - GRUDADO na imagem - ALTURA FIXA: 290px */}
-                  <div className="flex flex-col justify-center flex-1 bg-gray-200 p-4 md:p-6 lg:p-8 h-[290px]">
+                  {/* Conteúdo à direita - SEM fundo cinza - GRUDADO na imagem */}
+                  <div className="flex flex-col justify-start flex-1 p-4 md:p-6 lg:p-8">
                     {pub.file_url ? (
                       <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
                         <a
