@@ -64,9 +64,9 @@ export default async function PublicacoesPage() {
             <div className="space-y-8 md:space-y-10 lg:space-y-12">
               {publicacoes.map((pub) => (
                 <div key={pub.id} className="flex flex-col md:flex-row gap-0">
-                  {/* Imagem à esquerda - QUADRADA - SEM fundo - MENOR */}
+                  {/* Imagem à esquerda - TAMANHO FIXO: 328px x 290px */}
                   {pub.image_url && (
-                    <div className="relative w-full md:w-[35%] aspect-square flex-shrink-0 overflow-hidden">
+                    <div className="relative w-full md:w-[328px] h-[290px] flex-shrink-0 overflow-hidden">
                       <Image
                         src={pub.image_url}
                         alt={pub.title}
