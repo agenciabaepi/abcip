@@ -3,7 +3,6 @@ import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
-import { Download } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Publicações ABCIP",
@@ -64,41 +63,68 @@ export default async function PublicacoesPage() {
             <div className="space-y-8 md:space-y-10 lg:space-y-12">
               {publicacoes.map((pub) => (
                 <div key={pub.id} className="flex flex-col md:flex-row gap-0">
-                  {/* Imagem à esquerda - TAMANHO FIXO: 328px x 290px */}
+                  {/* Imagem à esquerda - TAMANHO FIXO: 328px x 290px - CLICÁVEL */}
                   {pub.image_url && (
                     <div className="relative w-full md:w-[328px] h-[290px] flex-shrink-0 overflow-hidden">
-                      <Image
-                        src={pub.image_url}
-                        alt={pub.title}
-                        fill
-                        className="object-cover"
-                      />
+                      {pub.file_url ? (
+                        <a
+                          href={pub.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full h-full"
+                        >
+                          <Image
+                            src={pub.image_url}
+                            alt={pub.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </a>
+                      ) : (
+                        <Image
+                          src={pub.image_url}
+                          alt={pub.title}
+                          fill
+                          className="object-cover"
+                        />
+                      )}
                     </div>
                   )}
                   
                   {/* Conteúdo à direita - COM fundo cinza - GRUDADO na imagem - ALTURA FIXA: 290px */}
                   <div className="flex flex-col justify-center flex-1 bg-gray-200 p-4 md:p-6 lg:p-8 h-[290px]">
-                    <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
-                      {pub.title}
-                    </h3>
+                    {pub.file_url ? (
+                      <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
+                        <a
+                          href={pub.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline"
+                        >
+                          {pub.title}
+                        </a>
+                      </h3>
+                    ) : (
+                      <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
+                        {pub.title}
+                      </h3>
+                    )}
                     
                     {pub.description && (
                       <p className="font-archivo text-xs md:text-sm lg:text-base font-normal text-black leading-normal text-justify">
-                        {pub.description}
+                        {pub.file_url ? (
+                          <a
+                            href={pub.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline"
+                          >
+                            {pub.description}
+                          </a>
+                        ) : (
+                          pub.description
+                        )}
                       </p>
-                    )}
-
-                    {pub.file_url && (
-                      <a
-                        href={pub.file_url}
-                        download={pub.file_name}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-archivo font-medium transition-colors mt-4"
-                      >
-                        <Download className="w-4 h-4" />
-                        Baixar Publicação
-                      </a>
                     )}
                   </div>
                 </div>
