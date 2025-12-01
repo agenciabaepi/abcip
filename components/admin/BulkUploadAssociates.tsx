@@ -58,6 +58,17 @@ export default function BulkUploadAssociates() {
     const progress: { [key: string]: number } = {};
 
     try {
+      // Buscar a maior ordem atual para definir a ordem dos novos associados
+      const { data: existingAssociates } = await supabase
+        .from("associates")
+        .select("order")
+        .order("order", { ascending: false })
+        .limit(1);
+      
+      let currentOrder = existingAssociates && existingAssociates.length > 0 
+        ? (existingAssociates[0].order || 0) 
+        : 0;
+
       const uploadPromises = files.map(async (file, index) => {
         try {
           // Extrair nome da empresa do nome do arquivo (remover extensão)
@@ -84,6 +95,7 @@ export default function BulkUploadAssociates() {
             name: name,
             logo_url: publicUrl,
             website: null,
+            order: currentOrder + index + 1,
           });
 
           if (insertError) throw insertError;

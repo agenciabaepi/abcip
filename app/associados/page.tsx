@@ -15,7 +15,8 @@ export default async function AssociadosPage() {
       supabase
         .from("associates")
         .select("*")
-        .order("name", { ascending: true }),
+        .order("order", { ascending: true })
+        .order("created_at", { ascending: true }),
       supabase.from("associados_page_settings").select("*").single(),
     ]);
     

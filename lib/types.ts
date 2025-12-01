@@ -112,6 +112,7 @@ export interface Associate {
   name: string;
   logo_url: string;
   website?: string;
+  order?: number;
   created_at?: string;
   updated_at?: string;
 }
