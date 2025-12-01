@@ -14,8 +14,8 @@ export default async function AssociadosPage() {
     const supabase = await createClient();
     const [associatesRes, settingsRes] = await Promise.all([
       supabase
-        .from("associates")
-        .select("*")
+      .from("associates")
+      .select("*")
         .order("order", { ascending: true })
         .order("created_at", { ascending: true }),
       supabase.from("associados_page_settings").select("*").single(),
@@ -56,18 +56,18 @@ export default async function AssociadosPage() {
           </h1>
 
           {associates && associates.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 sm:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 sm:gap-2">
               {associates.map((associate) => (
                 <div
                   key={associate.id}
-                  className="flex items-center justify-center p-4 bg-white rounded-lg hover:shadow-md transition-all"
+                  className="flex items-center justify-center p-1 bg-white rounded-lg hover:shadow-md transition-all"
                 >
                   {associate.website ? (
                     <a
                       href={associate.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full h-32 sm:h-40 md:h-48 flex items-center justify-center"
+                      className="w-full h-24 sm:h-28 md:h-32 flex items-center justify-center"
                     >
                       <AssociateLogo
                         logoUrl={associate.logo_url || ""}
@@ -75,7 +75,7 @@ export default async function AssociadosPage() {
                       />
                     </a>
                   ) : (
-                    <div className="w-full h-32 sm:h-40 md:h-48 flex items-center justify-center">
+                    <div className="w-full h-24 sm:h-28 md:h-32 flex items-center justify-center">
                       <AssociateLogo
                         logoUrl={associate.logo_url || ""}
                         name={associate.name}

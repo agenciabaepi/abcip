@@ -50,7 +50,7 @@ export default async function MessagesPage() {
                 >
                   {message.created_at
                     ? format(new Date(message.created_at), "dd/MM/yyyy 'às' HH:mm", {
-                        locale: ptBR,
+                    locale: ptBR,
                       })
                     : "Data não disponível"}
                 </time>
