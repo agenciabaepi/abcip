@@ -77,3 +77,90 @@ export interface PublicacoesPageSettings {
   created_at?: string;
   updated_at?: string;
 }
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  position: string;
+  bio?: string;
+  photo_url?: string;
+  email?: string;
+  linkedin?: string;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface BoardMember {
+  id: string;
+  name: string;
+  position: string;
+  bio?: string;
+  photo_url?: string;
+  email?: string;
+  linkedin?: string;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Associate {
+  id: string;
+  name: string;
+  logo_url: string;
+  website?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  excerpt?: string;
+  cover_image?: string;
+  published: boolean;
+  author?: string;
+  publish_date?: string;
+  views?: number;
+  likes?: number;
+  shares?: number;
+  comments_count?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Video {
+  id: string;
+  title: string;
+  description?: string;
+  youtube_url: string;
+  thumbnail_url?: string;
+  published: boolean;
+  order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface StrategicCommittee {
+  id: string;
+  name: string;
+  leader_name?: string;
+  leader_email?: string;
+  description?: string;
+  image_url?: string;
+  order: number;
+  active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface PostComment {
+  id: string;
+  post_id: string;
+  author_name: string;
+  content: string;
+  approved: boolean;
+  created_at?: string;
+  updated_at?: string;
+}

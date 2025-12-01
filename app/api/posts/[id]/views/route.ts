@@ -3,37 +3,33 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> | { id: string } }
 ) {
   try {
     const supabase = await createClient();
     
+    // Resolve params se for Promise (Next.js 15) ou usa diretamente (Next.js 14)
+    const resolvedParams = params instanceof Promise ? await params : params;
+    const postId = resolvedParams.id;
+    
+    // Obtém o número atual de views
+    const { data: post } = await supabase
+      .from("posts")
+      .select("views")
+      .eq("id", postId)
+      .single();
+
+    const currentViews = post?.views || 0;
+
     // Incrementa o contador de visualizações
-    const { error } = await supabase.rpc('increment_post_views', {
-      post_id: params.id
-    });
+    const { error } = await supabase
+      .from("posts")
+      .update({ views: currentViews + 1 })
+      .eq("id", postId);
 
-    // Se a função RPC não existir, usa UPDATE direto
-    if (error && error.message.includes('function') && error.message.includes('does not exist')) {
-      const { data: post } = await supabase
-        .from("posts")
-        .select("views")
-        .eq("id", params.id)
-        .single();
+    if (error) throw error;
 
-      const currentViews = post?.views || 0;
-
-      const { error: updateError } = await supabase
-        .from("posts")
-        .update({ views: currentViews + 1 })
-        .eq("id", params.id);
-
-      if (updateError) throw updateError;
-    } else if (error) {
-      throw error;
-    }
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, views: currentViews + 1 });
   } catch (error: any) {
     console.error("Error incrementing views:", error);
     return NextResponse.json(

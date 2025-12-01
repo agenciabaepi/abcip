@@ -35,7 +35,35 @@ export default async function Home() {
       .limit(1);
 
     banners = (bannersData as Banner[]) || [];
-    posts = (postsData as Post[]) || [];
+    const postsDataArray = (postsData as Post[]) || [];
+    
+    // Buscar contagem de comentários para os posts
+    if (postsDataArray.length > 0) {
+      const postIds = postsDataArray.map((p) => p.id);
+      const { data: commentsData } = await supabase
+        .from("post_comments")
+        .select("post_id")
+        .in("post_id", postIds)
+        .eq("approved", true);
+
+      // Contar comentários por post_id
+      const commentsCountMap = new Map<string, number>();
+      if (commentsData) {
+        commentsData.forEach((comment) => {
+          const currentCount = commentsCountMap.get(comment.post_id) || 0;
+          commentsCountMap.set(comment.post_id, currentCount + 1);
+        });
+      }
+
+      // Adicionar contagem de comentários aos posts
+      posts = postsDataArray.map((post) => ({
+        ...post,
+        comments_count: commentsCountMap.get(post.id) || 0,
+      }));
+    } else {
+      posts = [];
+    }
+    
     cta = (ctaData && ctaData.length > 0 ? (ctaData[0] as CTASectionType) : null);
     
     // Debug: verificar se a CTA foi carregada

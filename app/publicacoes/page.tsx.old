@@ -1,0 +1,266 @@
+import { Metadata } from "next";
+import HeaderWrapper from "@/components/HeaderWrapper";
+import Footer from "@/components/Footer";
+import Image from "next/image";
+import { createClient } from "@/lib/supabase/server";
+
+export const metadata: Metadata = {
+  title: "Publicações ABCIP",
+  description: "Publicações e materiais da ABCIP",
+};
+
+export default async function PublicacoesPage() {
+  let settings: any = null;
+  let publicacoes: any[] = [];
+
+  try {
+    const supabase = await createClient();
+    const [settingsRes, publicacoesRes] = await Promise.all([
+      supabase.from("publicacoes_page_settings").select("*").single(),
+      supabase
+        .from("publicacoes")
+        .select("*")
+        .eq("active", true)
+        .order("order", { ascending: true }),
+    ]);
+
+    settings = settingsRes.data;
+    publicacoes = publicacoesRes.data || [];
+  } catch (error) {
+    console.error("Erro ao carregar publicações:", error);
+  }
+  return (
+    <div className="min-h-screen flex flex-col">
+      <HeaderWrapper />
+      
+      <main className="flex-grow bg-white">
+        {/* Banner da Página */}
+        {settings?.banner_image_url && (
+          <div className="relative h-[40vh] sm:h-[45vh] md:h-[50vh] min-h-[300px] w-full overflow-hidden">
+            <Image
+              src={settings.banner_image_url}
+              alt="Banner Publicações"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
+
+        {/* Header Section */}
+        <section className="py-12 md:py-16 lg:py-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12 md:mb-16">
+              <h2 className="font-archivo text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+                Publicações
+              </h2>
+              <p className="font-archivo text-lg md:text-xl lg:text-2xl font-light text-gray-600 max-w-4xl mx-auto">
+                Acesse e saiba mais sobre o mercado em nossas publicações exclusivas.
+              </p>
+            </div>
+
+            {/* CSS Customizado - IDÊNTICO ao site original */}
+            <style dangerouslySetInnerHTML={{__html: `
+              .publicacoes-container {
+                max-width: 1000px;
+                margin: 0 auto;
+                width: 100%;
+              }
+              .publicacao-item {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                align-items: flex-start;
+                margin-bottom: 200px;
+                margin-top: 0;
+              }
+              .publicacao-item:last-child {
+                margin-bottom: 0;
+              }
+              .publicacao-imagem {
+                width: 350px;
+                min-height: 350px;
+                min-min-height: 350px;
+                max-min-height: 350px;
+                flex-shrink: 0;
+                overflow: visible;
+                position: relative;
+              }
+              .publicacao-imagem > a,
+              .publicacao-imagem > div {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              }
+              .publicacao-conteudo {
+                max-width: 550px;
+                min-height: 350px;
+                min-min-height: 350px;
+                max-min-height: 350px;
+                padding-left: 32px;
+                padding-top: 16px;
+                padding-right: 16px;
+                padding-bottom: 16px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                background-color: #f5f5f5;
+                box-sizing: border-box;
+                overflow: visible;
+                box-sizing: border-box;
+              }
+                font-family: var(--font-archivo), 'Archivo', sans-serif;
+                font-weight: 700;
+                font-size: clamp(14px, 1.5vw, 20px);
+                line-height: 1.2;
+                text-decoration: none;
+                margin-bottom: 16px;
+                margin-top: 0;
+                text-transform: uppercase;
+                color: #000000;
+                letter-spacing: 0;
+              }
+              .publicacao-texto {
+                font-family: var(--font-archivo), 'Archivo', sans-serif;
+                font-weight: 100;
+                font-size: clamp(15px, 1.2vw, 18px);
+                line-height: 1.5;
+                text-align: justify;
+                text-justify: inter-word;
+                hyphens: auto;
+                color: #000000;
+                margin: 0;
+                padding: 0;
+                letter-spacing: 0;
+              }
+              .publicacao-texto a,
+              .publicacao-titulo a {
+                color: inherit;
+                text-decoration: none;
+              }
+              .publicacao-texto a:hover,
+              .publicacao-titulo a:hover {
+                text-decoration: underline;
+              }
+              @media (max-width: 768px) {
+                .publicacoes-container {
+                  max-width: 100%;
+                }
+                .publicacao-item {
+                  flex-direction: column;
+                }
+                .publicacao-imagem {
+                  width: 100%;
+                  height: auto;
+                  aspect-ratio: 328/290;
+                }
+                .publicacao-conteudo {
+                  max-width: 100%;
+                  padding-left: 0;
+                  padding-right: 0;
+                  padding-top: 20px;
+                }
+                .publicacao-titulo {
+                  font-size: clamp(14px, 4.5vw, 20px);
+                  margin-bottom: 12px;
+                }
+                .publicacao-texto {
+                  font-size: clamp(15px, 3.5vw, 18px);
+                }
+              }
+            `}} />
+
+            {/* Grid de Publicações - Estrutura idêntica ao site original */}
+            <div className="publicacoes-container" role="list">
+              {publicacoes.map((pub) => (
+                <div 
+                  key={pub.id} 
+                  role="listitem" 
+                  dir="ltr"
+                  className="publicacao-item"
+                >
+                  {/* Imagem à esquerda - TAMANHO FIXO: 328px x 290px - CLICÁVEL */}
+                  {pub.image_url && (
+                    <div className="publicacao-imagem">
+                      {pub.file_url ? (
+                        <a
+                          href={pub.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full h-full"
+                        >
+                          <Image
+                            src={pub.image_url}
+                            alt={pub.title}
+                            fill
+                            className="object-contain"
+                            style={{ objectPosition: 'center' }}
+                          />
+                        </a>
+                      ) : (
+                        <Image
+                          src={pub.image_url}
+                          alt={pub.title}
+                          fill
+                          className="object-contain"
+                          style={{ objectPosition: 'center' }}
+                        />
+                      )}
+                    </div>
+                  )}
+                  
+                  {/* Conteúdo à direita - Alinhado ao topo, sem fundo */}
+                  <div className="publicacao-conteudo">
+                    {pub.file_url ? (
+                      <h3 className="publicacao-titulo">
+                        <a
+                          href={pub.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {pub.title}
+                        </a>
+                      </h3>
+                    ) : (
+                      <h3 className="publicacao-titulo">
+                        {pub.title}
+                      </h3>
+                    )}
+                    
+                    {pub.description && (
+                      <p className="publicacao-texto">
+                        {pub.file_url ? (
+                          <a
+                            href={pub.file_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {pub.description}
+                          </a>
+                        ) : (
+                          pub.description
+                        )}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {publicacoes.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="font-archivo text-lg text-gray-500">
+                    Nenhuma publicação disponível no momento.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

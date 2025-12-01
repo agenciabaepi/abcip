@@ -14,14 +14,14 @@ export default function BoardMemberProfile({ member, index }: BoardMemberProfile
   return (
     <div className="mb-8 md:mb-10 last:mb-0">
       <div
-        className={`flex flex-col ${
-          isEven ? "md:flex-row" : "md:flex-row-reverse"
-        } gap-4 md:gap-6 items-start`}
+        className={`flex flex-col md:flex-row gap-4 md:gap-8 lg:gap-12 items-start md:items-center ${
+          isEven ? "" : "md:flex-row-reverse"
+        }`}
       >
         {/* Foto com Badge */}
-        <div className={`w-full md:w-2/5 ${isEven ? "md:order-1" : "md:order-2"}`}>
+        <div className="w-full md:w-2/5 flex-shrink-0 mb-4 md:mb-0">
           <div className="relative w-full max-w-xs mx-auto md:mx-0">
-            <div className="relative aspect-[3/4] w-full">
+            <div className="relative aspect-[3/4] w-full max-w-[280px] mx-auto md:max-w-none">
               {hasPhoto && member.photo_url ? (
                 <Image
                   src={member.photo_url}
@@ -61,7 +61,7 @@ export default function BoardMemberProfile({ member, index }: BoardMemberProfile
         </div>
 
         {/* Biografia */}
-        <div className={`w-full md:w-3/5 ${isEven ? "md:order-2" : "md:order-1"}`}>
+        <div className="w-full md:w-3/5 flex-grow">
           <div className="space-y-2">
             <div>
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-0.5">
@@ -74,7 +74,7 @@ export default function BoardMemberProfile({ member, index }: BoardMemberProfile
             
             {member.bio && (
               <div
-                className="text-gray-700 leading-relaxed text-sm"
+                className="prose prose-sm sm:prose-base md:prose-lg lg:prose-xl max-w-none font-archivo font-thin text-sm sm:text-base md:text-lg lg:text-xl text-justify"
                 dangerouslySetInnerHTML={{ __html: member.bio }}
               />
             )}

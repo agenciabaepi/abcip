@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Eye, Share2, Facebook, Twitter, Linkedin, Link as LinkIcon, MessageCircle } from "lucide-react";
+import { Eye, Share2, Facebook, Twitter, Linkedin, Link as LinkIcon, MessageCircle, Heart } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface PostStatsProps {
   postId: string;
@@ -23,24 +24,48 @@ export default function PostStats({
   shareDescription,
 }: PostStatsProps) {
   const [views, setViews] = useState(initialViews);
+  const [likes, setLikes] = useState(initialLikes);
   const [shares, setShares] = useState(initialShares);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isLoadingLike, setIsLoadingLike] = useState(false);
   const [currentUrl, setCurrentUrl] = useState(shareUrl);
 
   useEffect(() => {
     if (typeof window !== "undefined" && !shareUrl.includes("http")) {
       setCurrentUrl(`${window.location.origin}${shareUrl}`);
     }
-  }, [shareUrl]);
+    
+    // Verifica se o usuário já curtiu (usando localStorage)
+    if (typeof window !== "undefined") {
+      const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
+      setIsLiked(likedPosts.includes(postId));
+    }
+  }, [shareUrl, postId]);
 
   useEffect(() => {
     const incrementViews = async () => {
       try {
-        await fetch(`/api/posts/${postId}/views`, { method: "POST" });
-        setViews((prev) => prev + 1);
+        const response = await fetch(`/api/posts/${postId}/views`, { 
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.views) {
+            setViews(data.views);
+          } else {
+            setViews((prev) => prev + 1);
+          }
+        }
       } catch (error) {
         console.error("Error incrementing views:", error);
       }
     };
+    
+    // Incrementa visualizações quando o componente é montado
     incrementViews();
   }, [postId]);
 
@@ -63,6 +88,46 @@ export default function PostStats({
     }
   };
 
+  const handleLike = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Verifica se já curtiu
+    if (typeof window === "undefined") return;
+    
+    const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "[]");
+    if (likedPosts.includes(postId)) {
+      toast.error("Você já curtiu esta notícia!");
+      return;
+    }
+
+    setIsLoadingLike(true);
+    try {
+      const response = await fetch(`/api/posts/${postId}/like`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao curtir");
+      }
+
+      const data = await response.json();
+      setLikes(data.likes);
+      setIsLiked(true);
+
+      // Salva no localStorage
+      const updatedLikedPosts = [...likedPosts, postId];
+      localStorage.setItem("likedPosts", JSON.stringify(updatedLikedPosts));
+
+      toast.success("Curtida adicionada!");
+    } catch (error) {
+      console.error("Error liking post:", error);
+      toast.error("Erro ao curtir notícia");
+    } finally {
+      setIsLoadingLike(false);
+    }
+  };
+
   const encodedUrl = encodeURIComponent(currentUrl);
   const encodedTitle = encodeURIComponent(shareTitle);
   const shareLinks = {
@@ -80,6 +145,19 @@ export default function PostStats({
           <span className="font-medium">{views}</span>
           <span className="text-sm text-gray-500">visualizações</span>
         </div>
+        <button
+          onClick={handleLike}
+          disabled={isLiked || isLoadingLike}
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition ${
+            isLiked
+              ? "bg-red-100 text-red-600 cursor-not-allowed"
+              : "bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600"
+          } ${isLoadingLike ? "opacity-50 cursor-wait" : ""}`}
+          aria-label="Curtir notícia"
+        >
+          <Heart className={`w-5 h-5 ${isLiked ? "fill-current" : ""}`} />
+          <span className="font-medium">{likes}</span>
+        </button>
         <div className="flex items-center gap-2 text-gray-600">
           <Share2 className="w-5 h-5" />
           <span className="font-medium">{shares}</span>

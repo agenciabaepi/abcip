@@ -49,7 +49,7 @@ export default async function PublicacoesPage() {
 
         {/* Header Section */}
         <section className="py-12 md:py-16 lg:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 md:mb-16">
               <h2 className="font-archivo text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
                 Publicações
@@ -62,10 +62,10 @@ export default async function PublicacoesPage() {
             {/* Grid de Publicações */}
             <div className="space-y-8 md:space-y-10 lg:space-y-12">
               {publicacoes.map((pub) => (
-                <div key={pub.id} className="flex flex-col md:flex-row gap-0 items-start">
-                  {/* Imagem à esquerda - TAMANHO FIXO: 328px x 290px - CLICÁVEL */}
+                <div key={pub.id} className="flex flex-col md:flex-row gap-0 bg-white rounded-lg overflow-hidden shadow-md">
+                  {/* Imagem à esquerda - QUADRADA */}
                   {pub.image_url && (
-                    <div className="relative w-full md:w-[328px] h-[290px] flex-shrink-0 overflow-hidden">
+                    <div className="relative w-full md:w-[450px] md:h-[450px] flex-shrink-0 overflow-hidden">
                       {pub.file_url ? (
                         <a
                           href={pub.file_url}
@@ -73,51 +73,51 @@ export default async function PublicacoesPage() {
                           rel="noopener noreferrer"
                           className="block w-full h-full"
                         >
-                          <Image
+                          <img
                             src={pub.image_url}
                             alt={pub.title}
-                            fill
-                            className="object-cover"
+                            className="w-full h-full object-cover"
+                            style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         </a>
                       ) : (
-                        <Image
+                        <img
                           src={pub.image_url}
                           alt={pub.title}
-                          fill
-                          className="object-cover"
+                          className="w-full h-full object-cover"
+                          style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
                     </div>
                   )}
                   
-                  {/* Conteúdo à direita - SEM fundo cinza - GRUDADO na imagem */}
-                  <div className="flex flex-col justify-start flex-1 p-4 md:p-6 lg:p-8">
+                  {/* Conteúdo à direita - FUNDO CINZA CLARO - MESMA ALTURA DA IMAGEM */}
+                  <div className="flex flex-col justify-center flex-1 p-6 md:p-8 lg:p-10 bg-gray-100 md:h-[450px]">
                     {pub.file_url ? (
-                      <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
+                      <h3 className="font-archivo text-sm md:text-base lg:text-lg font-bold text-gray-900 mb-4 uppercase leading-tight">
                         <a
                           href={pub.file_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:underline"
+                          className="hover:text-primary-500 transition-colors"
                         >
                           {pub.title}
                         </a>
                       </h3>
                     ) : (
-                      <h3 className="font-archivo text-base md:text-lg lg:text-xl font-bold text-black mb-3 uppercase leading-tight">
+                      <h3 className="font-archivo text-sm md:text-base lg:text-lg font-bold text-gray-900 mb-4 uppercase leading-tight">
                         {pub.title}
                       </h3>
                     )}
                     
                     {pub.description && (
-                      <p className="font-archivo text-xs md:text-sm lg:text-base font-normal text-black leading-normal text-justify">
+                      <p className="font-archivo font-thin text-sm md:text-base lg:text-lg text-gray-700 leading-relaxed text-justify">
                         {pub.file_url ? (
                           <a
                             href={pub.file_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:underline"
+                            className="hover:text-primary-500 transition-colors"
                           >
                             {pub.description}
                           </a>

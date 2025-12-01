@@ -5,6 +5,7 @@ import { Associate } from "@/lib/types";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import Image from "next/image";
 import DeleteAssociateButton from "@/components/admin/DeleteAssociateButton";
+import BulkUploadAssociates from "@/components/admin/BulkUploadAssociates";
 
 export default async function AssociatesPage() {
   // Verificação obrigatória de autenticação
@@ -28,6 +29,8 @@ export default async function AssociatesPage() {
           <span>Novo Associado</span>
         </Link>
       </div>
+
+      <BulkUploadAssociates />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {associates && associates.length > 0 ? (

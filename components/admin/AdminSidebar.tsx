@@ -55,14 +55,18 @@ export default function AdminSidebar() {
   const menuItems = [
     { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
     { href: "/admin/posts", label: "Notícias", icon: FileText },
+    { href: "/admin/noticias", label: "Banner Notícias", icon: Image },
     { href: "/admin/banners", label: "Banners", icon: Image },
     { href: "/admin/cta", label: "CTA Homepage", icon: Megaphone },
     { href: "/admin/videos", label: "Vídeos", icon: Video },
     { href: "/admin/publicacoes", label: "Publicações", icon: FileText },
     { href: "/admin/associates", label: "Associados", icon: Users },
+    { href: "/admin/associados", label: "Banner Associados", icon: Image },
     { href: "/admin/about", label: "Quem Somos", icon: Info },
     { href: "/admin/board", label: "Diretoria", icon: Users },
     { href: "/admin/team", label: "Equipe", icon: Users },
+    { href: "/admin/committees", label: "Comitês Estratégicos", icon: Users },
+    { href: "/admin/contato", label: "Banner Contato", icon: Image },
     { href: "/admin/messages", label: "Mensagens", icon: MessageSquare },
     { href: "/admin/settings", label: "Configurações", icon: Settings },
   ];
