@@ -90,13 +90,23 @@ export default function BulkUploadAssociates() {
           // Upload do arquivo
           const { error: uploadError } = await supabase.storage
             .from("uploads")
-            .upload(filePath, file);
+            .upload(filePath, file, {
+              cacheControl: "3600",
+              upsert: false,
+            });
 
-          if (uploadError) throw uploadError;
+          if (uploadError) {
+            console.error(`Erro no upload de ${file.name}:`, uploadError);
+            throw uploadError;
+          }
 
+          // Obter URL pública
           const {
             data: { publicUrl },
           } = supabase.storage.from("uploads").getPublicUrl(filePath);
+
+          // Log para debug
+          console.log(`Upload concluído para ${name}:`, publicUrl);
 
           // Criar registro no banco
           const insertData: any = {

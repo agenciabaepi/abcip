@@ -44,12 +44,23 @@ export default function AssociatesList({ associates: initialAssociates }: Associ
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
               <div className="relative h-32 w-full mb-4">
-                <Image
-                  src={associate.logo_url}
-                  alt={associate.name}
-                  fill
-                  className="object-contain"
-                />
+                {associate.logo_url ? (
+                  <Image
+                    src={associate.logo_url}
+                    alt={associate.name}
+                    fill
+                    className="object-contain"
+                    unoptimized
+                    onError={(e) => {
+                      console.error("Erro ao carregar imagem:", associate.logo_url);
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-xs">Sem logo</span>
+                  </div>
+                )}
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{associate.name}</h3>
               {associate.website && (

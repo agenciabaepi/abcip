@@ -66,23 +66,41 @@ export default async function AssociadosPage() {
                       href={associate.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full h-32 sm:h-40 md:h-48 relative"
+                      className="w-full h-32 sm:h-40 md:h-48 flex items-center justify-center"
                     >
-                      <Image
-                        src={associate.logo_url}
-                        alt={associate.name}
-                        fill
-                        className="object-contain"
-                      />
+                      {associate.logo_url ? (
+                        <img
+                          src={associate.logo_url}
+                          alt={associate.name}
+                          className="max-w-full max-h-full object-contain"
+                          onError={(e) => {
+                            console.error("Erro ao carregar imagem:", associate.logo_url);
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-400 text-xs">Sem logo</span>
+                        </div>
+                      )}
                     </a>
                   ) : (
-                    <div className="w-full h-32 sm:h-40 md:h-48 relative">
-                      <Image
-                        src={associate.logo_url}
-                        alt={associate.name}
-                        fill
-                        className="object-contain"
-                      />
+                    <div className="w-full h-32 sm:h-40 md:h-48 flex items-center justify-center">
+                      {associate.logo_url ? (
+                        <img
+                          src={associate.logo_url}
+                          alt={associate.name}
+                          className="max-w-full max-h-full object-contain"
+                          onError={(e) => {
+                            console.error("Erro ao carregar imagem:", associate.logo_url);
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-400 text-xs">Sem logo</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
