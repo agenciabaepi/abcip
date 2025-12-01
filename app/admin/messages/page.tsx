@@ -45,12 +45,14 @@ export default async function MessagesPage() {
                   </div>
                 </div>
                 <time
-                  dateTime={message.created_at}
+                  dateTime={message.created_at || new Date().toISOString()}
                   className="text-sm text-gray-500"
                 >
-                  {format(new Date(message.created_at), "dd/MM/yyyy 'às' HH:mm", {
-                    locale: ptBR,
-                  })}
+                  {message.created_at
+                    ? format(new Date(message.created_at), "dd/MM/yyyy 'às' HH:mm", {
+                        locale: ptBR,
+                      })
+                    : "Data não disponível"}
                 </time>
               </div>
               <p className="text-gray-700 whitespace-pre-wrap">{message.message}</p>

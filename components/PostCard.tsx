@@ -48,10 +48,12 @@ export default function PostCard({ post }: PostCardProps) {
               <span className="text-sm font-semibold text-gray-900">ABCIP</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-500">
-              <time dateTime={publishDate}>
-                {format(new Date(publishDate), "dd 'de' MMM", {
-                  locale: ptBR,
-                })}
+              <time dateTime={publishDate || new Date().toISOString()}>
+                {publishDate
+                  ? format(new Date(publishDate), "dd 'de' MMM", {
+                      locale: ptBR,
+                    })
+                  : "Data não disponível"}
               </time>
               <span>•</span>
               <span>{readingTime} min de leitura</span>

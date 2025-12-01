@@ -2,6 +2,7 @@ export interface SiteSettings {
   id?: string;
   site_name: string;
   site_description?: string;
+  contact_email?: string;
   logo_url?: string;
   logo_white_url?: string;
   favicon_url?: string;
@@ -19,8 +20,10 @@ export interface FooterSettings {
   facebook?: string;
   instagram?: string;
   linkedin?: string;
+  twitter?: string;
   youtube?: string;
   background_image_url?: string;
+  links?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -122,6 +125,7 @@ export interface Post {
   published: boolean;
   author?: string;
   publish_date?: string;
+  external_link?: string;
   views?: number;
   likes?: number;
   shares?: number;
@@ -136,8 +140,10 @@ export interface Video {
   description?: string;
   youtube_url: string;
   thumbnail_url?: string;
-  published: boolean;
-  order: number;
+  order_index?: number;
+  active?: boolean;
+  published?: boolean;
+  order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -162,5 +168,25 @@ export interface PostComment {
   content: string;
   approved: boolean;
   created_at?: string;
+  updated_at?: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  company_name?: string;
+  subject?: string;
+  message: string;
+  created_at?: string;
+}
+
+export interface AboutPage {
+  id: string;
+  title: string;
+  content: string;
+  image_url?: string;
+  banner_image?: string;
   updated_at?: string;
 }

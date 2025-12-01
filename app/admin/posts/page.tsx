@@ -67,9 +67,11 @@ export default async function PostsPage() {
                         {post.published ? "Publicado" : "Rascunho"}
                       </span>
                       <span className="ml-2 text-xs text-gray-500">
-                        {format(new Date(post.created_at), "dd/MM/yyyy", {
-                          locale: ptBR,
-                        })}
+                        {post.created_at
+                          ? format(new Date(post.created_at), "dd/MM/yyyy", {
+                              locale: ptBR,
+                            })
+                          : "Data não disponível"}
                       </span>
                     </div>
                   </td>
@@ -85,9 +87,11 @@ export default async function PostsPage() {
                     </span>
                   </td>
                   <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">
-                    {format(new Date(post.created_at), "dd/MM/yyyy", {
-                      locale: ptBR,
-                    })}
+                    {post.created_at
+                      ? format(new Date(post.created_at), "dd/MM/yyyy", {
+                          locale: ptBR,
+                        })
+                      : "Data não disponível"}
                   </td>
                   <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
