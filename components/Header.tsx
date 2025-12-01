@@ -262,6 +262,21 @@ export default function Header({ logoUrl: initialLogoUrl, logoWhiteUrl: initialL
                       </button>
                       {isMobileDropdownOpen && (
                         <div className="pl-4 mt-1 space-y-1">
+                          {/* Link para a página principal de notícias */}
+                          <Link
+                            href={link.href}
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              setOpenDropdown(null);
+                            }}
+                            className={`block px-4 py-2 text-sm rounded-lg transition-colors ${
+                              isActive(link.href)
+                                ? "text-primary-400 bg-primary-50"
+                                : "text-gray-700 hover:bg-gray-50"
+                            }`}
+                          >
+                            Notícias
+                          </Link>
                           {link.dropdownItems.map((item) => (
                             <Link
                               key={item.href}
