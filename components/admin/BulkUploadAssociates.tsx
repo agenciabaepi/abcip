@@ -59,15 +59,23 @@ export default function BulkUploadAssociates() {
 
     try {
       // Buscar a maior ordem atual para definir a ordem dos novos associados
-      const { data: existingAssociates } = await supabase
+      // Se o campo order não existir, isso falhará e usaremos null para indicar que não existe
+      let currentOrder: number | null = null;
+      const { data: existingAssociates, error: orderError } = await supabase
         .from("associates")
         .select("order")
         .order("order", { ascending: false })
         .limit(1);
       
-      let currentOrder = existingAssociates && existingAssociates.length > 0 
-        ? (existingAssociates[0].order || 0) 
-        : 0;
+      // Se não houver erro e houver dados, o campo existe
+      if (!orderError && existingAssociates) {
+        if (existingAssociates.length > 0) {
+          currentOrder = existingAssociates[0].order || 0;
+        } else {
+          currentOrder = 0; // Campo existe mas não há associados
+        }
+      }
+      // Se houver erro (provavelmente campo não existe), currentOrder permanece null
 
       const uploadPromises = files.map(async (file, index) => {
         try {
@@ -91,14 +99,34 @@ export default function BulkUploadAssociates() {
           } = supabase.storage.from("uploads").getPublicUrl(filePath);
 
           // Criar registro no banco
-          const { error: insertError } = await supabase.from("associates").insert({
+          const insertData: any = {
             name: name,
             logo_url: publicUrl,
             website: null,
-            order: currentOrder + index + 1,
-          });
+          };
 
-          if (insertError) throw insertError;
+          // Adicionar order apenas se o campo existe no banco (currentOrder não é null)
+          if (currentOrder !== null) {
+            insertData.order = currentOrder + index + 1;
+          }
+
+          const { error: insertError } = await supabase.from("associates").insert(insertData);
+
+          if (insertError) {
+            // Se o erro for por causa do campo order não existir, tentar sem ele
+            if (
+              insertError.message?.includes("order") ||
+              insertError.message?.includes("column") ||
+              insertError.code === "42703" ||
+              insertError.code === "PGRST116"
+            ) {
+              delete insertData.order;
+              const { error: retryError } = await supabase.from("associates").insert(insertData);
+              if (retryError) throw retryError;
+            } else {
+              throw insertError;
+            }
+          }
 
           progress[file.name] = 100;
           setUploadProgress({ ...progress });
@@ -108,7 +136,18 @@ export default function BulkUploadAssociates() {
           console.error(`Error uploading ${file.name}:`, error);
           progress[file.name] = -1; // -1 indica erro
           setUploadProgress({ ...progress });
-          return { success: false, name: file.name, error: error.message };
+          
+          // Mensagem de erro mais detalhada
+          let errorMessage = "Erro desconhecido";
+          if (error.message) {
+            errorMessage = error.message;
+          } else if (error.error) {
+            errorMessage = error.error;
+          } else if (typeof error === "string") {
+            errorMessage = error;
+          }
+          
+          return { success: false, name: file.name, error: errorMessage };
         }
       });
 
@@ -120,7 +159,23 @@ export default function BulkUploadAssociates() {
         toast.success(`${successCount} associado(s) criado(s) com sucesso!`);
       }
       if (errorCount > 0) {
-        toast.error(`${errorCount} associado(s) falharam ao ser criados.`);
+        const failedFiles = results
+          .filter((r) => !r.success)
+          .map((r) => r.name)
+          .slice(0, 5)
+          .join(", ");
+        const moreText = errorCount > 5 ? ` e mais ${errorCount - 5}...` : "";
+        toast.error(
+          `${errorCount} associado(s) falharam ao ser criados.${failedFiles ? ` (${failedFiles}${moreText})` : ""}`,
+          { duration: 6000 }
+        );
+        
+        // Log detalhado dos erros no console
+        results
+          .filter((r) => !r.success)
+          .forEach((r) => {
+            console.error(`Falha ao criar associado "${r.name}":`, (r as any).error);
+          });
       }
 
       // Limpar após sucesso
