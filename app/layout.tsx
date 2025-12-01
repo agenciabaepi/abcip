@@ -23,8 +23,8 @@ const azeretMono = Azeret_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ABCIP - Concessionária de Iluminação Pública",
-  description: "ABCIP - Concessionária de Iluminação Pública",
+  title: "ABCIP - Associação Brasileira das Concessionárias de Iluminação Pública e Cidades Inteligentes",
+  description: "ABCIP - Associação Brasileira das Concessionárias de Iluminação Pública e Cidades Inteligentes",
 };
 
 export default function RootLayout({
