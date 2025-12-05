@@ -48,8 +48,8 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm<LoginForm>({
     defaultValues: {
-      email: "abcip@admin.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
   });
 
