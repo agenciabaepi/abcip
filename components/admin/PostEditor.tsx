@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Post } from "@/lib/types";
 import toast from "react-hot-toast";
 import { Calendar, Link as LinkIcon, Image as ImageIcon, Eye, User } from "lucide-react";
+import { convertUrlsToLinks } from "@/lib/utils";
 
 interface PostEditorProps {
   post?: Post;
@@ -32,6 +33,29 @@ export default function PostEditor({ post }: PostEditorProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
+  // Converter HTML para texto ao carregar post existente
+  const getInitialContent = (): string => {
+    if (!post?.content) return "";
+    // Se o conteúdo já está em HTML, converter para texto simples
+    if (post.content.includes('<') && post.content.includes('>')) {
+      // Usar uma abordagem simples: remover tags e converter <br> e </p><p> em quebras de linha
+      let text = post.content
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<p[^>]*>/gi, '')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '') // Remover outras tags HTML
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .trim();
+      return text;
+    }
+    return post.content;
+  };
+
   const {
     register,
     handleSubmit,
@@ -42,7 +66,7 @@ export default function PostEditor({ post }: PostEditorProps) {
     defaultValues: {
       title: post?.title || "",
       excerpt: post?.excerpt || "",
-      content: post?.content || "",
+      content: getInitialContent(),
       published: post?.published || false,
       external_link: post?.external_link || "",
       publish_date: post?.publish_date 
@@ -54,7 +78,6 @@ export default function PostEditor({ post }: PostEditorProps) {
 
   const published = watch("published");
   const title = watch("title");
-  const excerpt = watch("excerpt");
   const content = watch("content");
   const publishDate = watch("publish_date");
   const externalLink = watch("external_link");
@@ -124,13 +147,68 @@ export default function PostEditor({ post }: PostEditorProps) {
     toast.success("Imagem removida. Selecione uma nova imagem.");
   };
 
+  // Função para converter quebras de linha em HTML
+  const convertLineBreaksToHTML = (text: string): string => {
+    if (!text) return "";
+    
+    // Se o texto já contém tags HTML, não processar quebras de linha, mas processar URLs
+    if (text.includes('<') && text.includes('>')) {
+      return convertUrlsToLinks(text);
+    }
+    
+    // Normalizar todas as quebras de linha
+    let normalized = text
+      .replace(/\r\n/g, '\n') // Windows
+      .replace(/\r/g, '\n');   // Mac antigo
+    
+    // Dividir em linhas
+    const lines = normalized.split('\n');
+    const paragraphs: string[] = [];
+    let currentParagraph: string[] = [];
+    
+    // Agrupar linhas em parágrafos (linhas vazias separam parágrafos)
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed === '') {
+        // Linha vazia: finalizar parágrafo atual e começar novo
+        if (currentParagraph.length > 0) {
+          paragraphs.push(currentParagraph.join('<br>'));
+          currentParagraph = [];
+        }
+      } else {
+        // Adicionar linha ao parágrafo atual
+        currentParagraph.push(trimmed);
+      }
+    }
+    
+    // Adicionar último parágrafo se houver
+    if (currentParagraph.length > 0) {
+      paragraphs.push(currentParagraph.join('<br>'));
+    }
+    
+    // Se não há parágrafos, criar um com todo o texto
+    let html = '';
+    if (paragraphs.length === 0) {
+      html = `<p>${normalized.trim().replace(/\n/g, '<br>')}</p>`;
+    } else {
+      // Converter cada parágrafo em tag <p>
+      html = paragraphs.map(p => `<p>${p}</p>`).join('\n');
+    }
+    
+    // Converter URLs em links
+    return convertUrlsToLinks(html);
+  };
+
   const onSubmit = async (data: PostForm) => {
     setIsSaving(true);
     try {
+      // Converter quebras de linha em HTML antes de salvar
+      const processedContent = convertLineBreaksToHTML(data.content);
+      
       const postData = {
         title: data.title,
         excerpt: data.excerpt || null,
-        content: data.content,
+        content: processedContent,
         cover_image: coverImage || null,
         published: data.published,
         external_link: data.external_link || null,
@@ -204,9 +282,6 @@ export default function PostEditor({ post }: PostEditorProps) {
                 })}
               </p>
             )}
-            {excerpt && (
-              <p className="text-lg text-gray-700 mb-6 italic">{excerpt}</p>
-            )}
             <div
               className="prose prose-lg max-w-none"
               dangerouslySetInnerHTML={{ __html: content || "<p>Conteúdo da notícia...</p>" }}
@@ -243,21 +318,6 @@ export default function PostEditor({ post }: PostEditorProps) {
                 {errors.title && (
                   <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
                 )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Resumo / Descrição
-                </label>
-                <textarea
-                  rows={3}
-                  {...register("excerpt")}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="Breve resumo da notícia (aparece na listagem)..."
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Este texto aparecerá na listagem de notícias. Se deixar em branco, será gerado automaticamente.
-                </p>
               </div>
 
               <div>

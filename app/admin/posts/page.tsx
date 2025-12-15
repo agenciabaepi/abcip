@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import DeletePostButton from "@/components/admin/DeletePostButton";
+import ConvertLinksButton from "@/components/admin/ConvertLinksButton";
 
 export default async function PostsPage() {
   // Verificação obrigatória de autenticação
@@ -29,6 +30,8 @@ export default async function PostsPage() {
           <span>Nova Notícia</span>
         </Link>
       </div>
+
+      <ConvertLinksButton />
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
