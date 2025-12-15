@@ -72,7 +72,8 @@ export function calculateReadingTime(content: string): number {
 export function convertUrlsToLinks(html: string): string {
   if (!html) return "";
   
-  // Regex para detectar URLs que não estão dentro de tags HTML
+  // Regex para detectar URLs
+  // Aceita http://, https://, www. e também domínios comuns
   const urlPattern = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)|(www\.[^\s<>"{}|\\^`\[\]]+)/gi;
   
   let result = html;
@@ -80,22 +81,49 @@ export function convertUrlsToLinks(html: string): string {
   
   // Encontrar todas as URLs e preparar substituições
   let match;
+  const processedMatches = new Set<string>(); // Evitar processar a mesma posição duas vezes
+  
   while ((match = urlPattern.exec(html)) !== null) {
     const start = match.index;
     const end = start + match[0].length;
     const matchText = match[0];
     
-    // Verificar se está dentro de uma tag <a>
+    // Evitar processar a mesma posição
+    const matchKey = `${start}-${end}`;
+    if (processedMatches.has(matchKey)) continue;
+    processedMatches.add(matchKey);
+    
+    // Verificar se está dentro de uma tag <a> existente
     const beforeMatch = html.substring(0, start);
+    const afterMatch = html.substring(end);
+    
+    // Verificar se está dentro de qualquer tag HTML
     const lastOpenTag = beforeMatch.lastIndexOf('<');
     const lastCloseTag = beforeMatch.lastIndexOf('>');
     
     // Se está dentro de uma tag HTML, verificar se é <a>
     if (lastOpenTag > lastCloseTag) {
-      const tagStart = beforeMatch.substring(lastOpenTag);
-      if (tagStart.includes('<a') && !tagStart.includes('</a>')) {
-        continue; // Já está dentro de um link, pular
+      const tagContent = beforeMatch.substring(lastOpenTag);
+      // Se é uma tag <a>, pular
+      if (tagContent.match(/<a[\s>]/i)) {
+        continue; // Já está dentro de um link
       }
+    }
+    
+    // Verificar se está dentro de um link existente (verificação mais robusta)
+    const lastOpenA = beforeMatch.lastIndexOf('<a');
+    const lastCloseA = beforeMatch.lastIndexOf('</a>');
+    const nextCloseA = afterMatch.indexOf('</a>');
+    
+    // Se há uma tag <a> aberta antes e não foi fechada antes desta posição, pular
+    if (lastOpenA > lastCloseA && nextCloseA !== -1) {
+      continue; // Já está dentro de um link
+    }
+    
+    // Verificar se a URL já está em um href
+    const contextBefore = html.substring(Math.max(0, start - 50), start);
+    if (contextBefore.includes('href=') && contextBefore.lastIndexOf('href=') > contextBefore.lastIndexOf('>')) {
+      continue; // Provavelmente já é um href
     }
     
     // Determinar a URL completa
@@ -104,11 +132,16 @@ export function convertUrlsToLinks(html: string): string {
       url = 'https://' + matchText;
     }
     
-    // Remover pontuação final comum (.,;:!?)
+    // Remover pontuação final comum (.,;:!?) mas preservar se for parte do domínio
     const punctuationMatch = matchText.match(/[.,;:!?]+$/);
     const punctuation = punctuationMatch ? punctuationMatch[0] : '';
     const cleanUrl = url.replace(/[.,;:!?]+$/, '');
     const cleanMatch = matchText.replace(/[.,;:!?]+$/, '');
+    
+    // Verificar se já não é um link
+    if (cleanMatch.toLowerCase().startsWith('<a ') || cleanMatch.toLowerCase().includes('</a>')) {
+      continue;
+    }
     
     const replacement = `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:text-primary-600 underline">${cleanMatch}</a>${punctuation}`;
     
