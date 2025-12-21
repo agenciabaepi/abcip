@@ -157,9 +157,16 @@ export default function Footer() {
               <div className="text-lg sm:text-xl md:text-xl lg:text-2xl font-light mb-1">
                 {footerSettings?.phone || "+55 11 91304 0730"}
               </div>
-              <div className="text-lg sm:text-xl md:text-xl lg:text-2xl font-light">
+              <div className="text-lg sm:text-xl md:text-xl lg:text-2xl font-light mb-1">
                 {footerSettings?.email || "contato@abcip.com.br"}
               </div>
+              <a
+                href="/webmail"
+                className="text-lg sm:text-xl md:text-xl lg:text-2xl font-light underline hover:no-underline transition-all"
+                title="Acessar Webmail"
+              >
+                Webmail
+              </a>
             </div>
           </div>
         </div>
