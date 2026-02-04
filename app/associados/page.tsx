@@ -56,18 +56,18 @@ export default async function AssociadosPage() {
           </h1>
 
           {associates && associates.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 sm:gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {associates.map((associate) => (
                 <div
                   key={associate.id}
-                  className="flex items-center justify-center p-1 bg-white rounded-lg hover:shadow-md transition-all"
+                  className="flex items-center justify-center p-3 sm:p-4 bg-white rounded-lg hover:shadow-md transition-all"
                 >
                   {associate.website ? (
                     <a
                       href={associate.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full h-24 sm:h-28 md:h-32 flex items-center justify-center"
+                      className="w-[120px] h-[80px] sm:w-[140px] sm:h-[90px] md:w-[160px] md:h-[100px] flex items-center justify-center overflow-hidden shrink-0"
                     >
                       <AssociateLogo
                         logoUrl={associate.logo_url || ""}
@@ -75,7 +75,7 @@ export default async function AssociadosPage() {
                       />
                     </a>
                   ) : (
-                    <div className="w-full h-24 sm:h-28 md:h-32 flex items-center justify-center">
+                    <div className="w-[120px] h-[80px] sm:w-[140px] sm:h-[90px] md:w-[160px] md:h-[100px] flex items-center justify-center overflow-hidden shrink-0">
                       <AssociateLogo
                         logoUrl={associate.logo_url || ""}
                         name={associate.name}
