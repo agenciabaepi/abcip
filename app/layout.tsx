@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { Syne, Azeret_Mono, Archivo } from "next/font/google";
+import SiteViewTracker from "@/components/SiteViewTracker";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${syne.variable} ${archivo.variable} ${azeretMono.variable}`}>
       <body className="antialiased">
         {children}
+        <SiteViewTracker />
         <Toaster position="top-right" />
       </body>
     </html>

@@ -1,0 +1,1 @@
+"use strict";exports.id=3403,exports.ids=[3403],exports.modules={73403:(e,s,t)=>{t.r(s),t.d(s,{default:()=>r});let r=(0,t(68570).createProxy)(String.raw`/Users/lucasoliveira/Documents/ABCIP/components/admin/BannerImage.tsx#default`)}};

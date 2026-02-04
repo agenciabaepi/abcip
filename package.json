@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:turbo": "next dev --turbo",
     "dev:network": "next dev -H 0.0.0.0 -p 3000",
     "build": "next build",
     "start": "next start",
@@ -20,6 +21,7 @@
     "react-dom": "^18.3.0",
     "react-hook-form": "^7.50.0",
     "react-hot-toast": "^2.4.1",
+    "react-quill": "^2.0.0",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

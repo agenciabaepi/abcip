@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/Users/lucasoliveira/Documents/ABCIP/app/layout":["static/media/1a4aa50920b5315c-s.p.woff2","static/media/fb751edd4b3a9ca4-s.p.woff2","static/media/8a1d8947e5852e30-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';

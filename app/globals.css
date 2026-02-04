@@ -134,3 +134,37 @@ p {
   @apply border-l-4 border-primary-500 pl-4 italic my-4;
 }
 
+/* Editor rico (Quill) no admin */
+.rich-text-editor .ql-container {
+  min-height: 280px;
+  font-size: 1rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+.rich-text-editor .ql-toolbar.ql-snow {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border-color: #d1d5db;
+}
+.rich-text-editor .ql-container.ql-snow {
+  border-color: #d1d5db;
+}
+.rich-text-editor .ql-toolbar.ql-snow .ql-picker-label,
+.rich-text-editor .ql-toolbar.ql-snow button {
+  color: #374151;
+}
+.rich-text-editor .ql-toolbar.ql-snow .ql-stroke {
+  stroke: #d1d5db;
+}
+.rich-text-editor .ql-toolbar.ql-snow .ql-fill {
+  fill: #9ca3af;
+}
+.rich-text-editor .ql-toolbar.ql-snow .ql-picker-label.ql-active,
+.rich-text-editor .ql-toolbar.ql-snow button:hover .ql-stroke {
+  stroke: #0d9488;
+}
+.rich-text-editor .ql-toolbar.ql-snow button:hover .ql-fill,
+.rich-text-editor .ql-toolbar.ql-snow .ql-picker-label.ql-active .ql-fill {
+  fill: #0d9488;
+}
+

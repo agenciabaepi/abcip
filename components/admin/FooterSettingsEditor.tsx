@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/client";
 import { FooterSettings } from "@/lib/types";
 import toast from "react-hot-toast";
 
+const DEFAULT_FOOTER_SETTINGS_ID = "00000000-0000-0000-0000-000000000001";
+
 interface FooterSettingsEditorProps {
   footerSettings?: FooterSettings | null;
 }
@@ -33,9 +35,13 @@ export default function FooterSettingsEditor({
   );
   const [isUploading, setIsUploading] = useState(false);
 
-  const parsedLinks = footerSettings?.links
-    ? JSON.parse(footerSettings.links)
-    : [];
+  let parsedLinks: unknown[] = [];
+  try {
+    parsedLinks = footerSettings?.links ? JSON.parse(footerSettings.links) : [];
+  } catch {
+    parsedLinks = [];
+  }
+  if (!Array.isArray(parsedLinks)) parsedLinks = [];
 
   const {
     register,
@@ -117,7 +123,9 @@ export default function FooterSettingsEditor({
   const onSubmit = async (data: FooterForm) => {
     setIsSaving(true);
     try {
+      const id = footerSettings?.id ?? DEFAULT_FOOTER_SETTINGS_ID;
       const footerData = {
+        id,
         address: data.address || null,
         phone: data.phone || null,
         email: data.email || null,
@@ -131,25 +139,19 @@ export default function FooterSettingsEditor({
         updated_at: new Date().toISOString(),
       };
 
-      if (footerSettings) {
-        const { error } = await supabase
-          .from("footer_settings")
-          .update(footerData)
-          .eq("id", footerSettings.id);
+      const { error } = await supabase
+        .from("footer_settings")
+        .upsert(footerData, { onConflict: "id" });
 
-        if (error) throw error;
-        toast.success("Configurações do rodapé atualizadas com sucesso!");
-      } else {
-        const { error } = await supabase.from("footer_settings").insert(footerData);
-
-        if (error) throw error;
-        toast.success("Configurações do rodapé criadas com sucesso!");
-      }
-
+      if (error) throw error;
+      toast.success("Configurações do rodapé salvas com sucesso!");
       router.refresh();
-    } catch (error) {
+    } catch (error: unknown) {
+      const message = error && typeof error === "object" && "message" in error
+        ? String((error as { message: string }).message)
+        : "Erro ao salvar configurações do rodapé.";
       console.error("Error saving footer settings:", error);
-      toast.error("Erro ao salvar configurações do rodapé.");
+      toast.error(message);
     } finally {
       setIsSaving(false);
     }

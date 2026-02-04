@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { createClient } from "@/lib/supabase/client";
 import { Post } from "@/lib/types";
 import toast from "react-hot-toast";
 import { Calendar, Link as LinkIcon, Image as ImageIcon, Eye, User } from "lucide-react";
 import { convertUrlsToLinks } from "@/lib/utils";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
 interface PostEditorProps {
   post?: Post;
@@ -33,32 +34,10 @@ export default function PostEditor({ post }: PostEditorProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
-  // Converter HTML para texto ao carregar post existente
-  const getInitialContent = (): string => {
-    if (!post?.content) return "";
-    // Se o conteúdo já está em HTML, converter para texto simples
-    if (post.content.includes('<') && post.content.includes('>')) {
-      // Usar uma abordagem simples: remover tags e converter <br> e </p><p> em quebras de linha
-      let text = post.content
-        .replace(/<\/p>/gi, '\n\n')
-        .replace(/<p[^>]*>/gi, '')
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<[^>]+>/g, '') // Remover outras tags HTML
-        .replace(/&nbsp;/g, ' ')
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .trim();
-      return text;
-    }
-    return post.content;
-  };
-
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     setValue,
     watch,
@@ -66,7 +45,7 @@ export default function PostEditor({ post }: PostEditorProps) {
     defaultValues: {
       title: post?.title || "",
       excerpt: post?.excerpt || "",
-      content: getInitialContent(),
+      content: post?.content || "",
       published: post?.published || false,
       external_link: post?.external_link || "",
       publish_date: post?.publish_date 
@@ -147,63 +126,11 @@ export default function PostEditor({ post }: PostEditorProps) {
     toast.success("Imagem removida. Selecione uma nova imagem.");
   };
 
-  // Função para converter quebras de linha em HTML
-  const convertLineBreaksToHTML = (text: string): string => {
-    if (!text) return "";
-    
-    // Se o texto já contém tags HTML, não processar quebras de linha, mas processar URLs
-    if (text.includes('<') && text.includes('>')) {
-      return convertUrlsToLinks(text);
-    }
-    
-    // Normalizar todas as quebras de linha
-    let normalized = text
-      .replace(/\r\n/g, '\n') // Windows
-      .replace(/\r/g, '\n');   // Mac antigo
-    
-    // Dividir em linhas
-    const lines = normalized.split('\n');
-    const paragraphs: string[] = [];
-    let currentParagraph: string[] = [];
-    
-    // Agrupar linhas em parágrafos (linhas vazias separam parágrafos)
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (trimmed === '') {
-        // Linha vazia: finalizar parágrafo atual e começar novo
-        if (currentParagraph.length > 0) {
-          paragraphs.push(currentParagraph.join('<br>'));
-          currentParagraph = [];
-        }
-      } else {
-        // Adicionar linha ao parágrafo atual
-        currentParagraph.push(trimmed);
-      }
-    }
-    
-    // Adicionar último parágrafo se houver
-    if (currentParagraph.length > 0) {
-      paragraphs.push(currentParagraph.join('<br>'));
-    }
-    
-    // Se não há parágrafos, criar um com todo o texto
-    let html = '';
-    if (paragraphs.length === 0) {
-      html = `<p>${normalized.trim().replace(/\n/g, '<br>')}</p>`;
-    } else {
-      // Converter cada parágrafo em tag <p>
-      html = paragraphs.map(p => `<p>${p}</p>`).join('\n');
-    }
-    
-    // Converter URLs em links
-    return convertUrlsToLinks(html);
-  };
-
   const onSubmit = async (data: PostForm) => {
     setIsSaving(true);
     try {
-      // Converter quebras de linha em HTML antes de salvar
-      const processedContent = convertLineBreaksToHTML(data.content);
+      // Conteúdo já vem em HTML do editor; só convertemos URLs soltas em links
+      const processedContent = convertUrlsToLinks(data.content || "");
       
       const postData = {
         title: data.title,
@@ -324,26 +251,21 @@ export default function PostEditor({ post }: PostEditorProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Conteúdo da Notícia *
                 </label>
-                <textarea
-                  rows={20}
-                  {...register("content", { required: "Conteúdo é obrigatório" })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm"
-                  placeholder="Digite o conteúdo da notícia. Você pode usar HTML para formatação..."
+                <Controller
+                  name="content"
+                  control={control}
+                  rules={{ required: "Conteúdo é obrigatório" }}
+                  render={({ field }) => (
+                    <RichTextEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Digite o conteúdo da notícia. Use a barra de ferramentas para negrito, itálico, listas e links."
+                    />
+                  )}
                 />
                 {errors.content && (
                   <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>
                 )}
-                <div className="mt-2 p-3 bg-blue-50 rounded-lg">
-                  <p className="text-xs text-blue-800 font-medium mb-1">💡 Dicas de formatação HTML:</p>
-                  <ul className="text-xs text-blue-700 space-y-1 list-disc list-inside">
-                    <li><code>&lt;p&gt;</code> para parágrafos</li>
-                    <li><code>&lt;strong&gt;</code> ou <code>&lt;b&gt;</code> para negrito</li>
-                    <li><code>&lt;em&gt;</code> ou <code>&lt;i&gt;</code> para itálico</li>
-                    <li><code>&lt;br&gt;</code> para quebra de linha</li>
-                    <li><code>&lt;ul&gt;</code> e <code>&lt;li&gt;</code> para listas</li>
-                    <li><code>&lt;a href=&quot;url&quot;&gt;</code> para links</li>
-                  </ul>
-                </div>
               </div>
             </div>
 

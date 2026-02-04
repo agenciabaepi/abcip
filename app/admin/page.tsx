@@ -25,6 +25,13 @@ export default async function AdminDashboard() {
   
   const supabase = await createClient();
 
+  // Intervalos para visualizações (horário de Brasília)
+  const now = new Date();
+  const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endToday = new Date(startToday.getTime() + 24 * 60 * 60 * 1000);
+  const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const endMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
   // Buscar todas as estatísticas
   const [
     { count: postsCount, data: postsData },
@@ -39,6 +46,10 @@ export default async function AdminDashboard() {
     { count: committeesCount },
     { data: recentMessages },
     { data: recentPosts },
+    { count: siteViewsTotal },
+    { count: siteViewsMonth },
+    { count: siteViewsToday },
+    { data: baselineRow },
   ] = await Promise.all([
     supabase.from("posts").select("*", { count: "exact" }),
     supabase.from("posts").select("*", { count: "exact", head: true }).eq("published", true),
@@ -52,7 +63,16 @@ export default async function AdminDashboard() {
     supabase.from("strategic_committees").select("*", { count: "exact", head: true }).eq("active", true),
     supabase.from("contact_messages").select("*").order("created_at", { ascending: false }).limit(5),
     supabase.from("posts").select("*").order("created_at", { ascending: false }).limit(5),
+    supabase.from("site_views").select("*", { count: "exact", head: true }),
+    supabase.from("site_views").select("*", { count: "exact", head: true }).gte("viewed_at", startMonth.toISOString()).lt("viewed_at", endMonth.toISOString()),
+    supabase.from("site_views").select("*", { count: "exact", head: true }).gte("viewed_at", startToday.toISOString()).lt("viewed_at", endToday.toISOString()),
+    supabase.from("site_views_baseline").select("total, month_count, day_count").eq("id", 1).maybeSingle(),
   ]);
+
+  const baseline = baselineRow ?? { total: 0, month_count: 0, day_count: 0 };
+  const totalWithBaseline = (siteViewsTotal ?? 0) + (baseline.total ?? 0);
+  const monthWithBaseline = (siteViewsMonth ?? 0) + (baseline.month_count ?? 0);
+  const dayWithBaseline = (siteViewsToday ?? 0) + (baseline.day_count ?? 0);
 
   // Calcular estatísticas de engajamento
   const totalViews = postsData?.reduce((sum, post) => sum + (post.views || 0), 0) || 0;
@@ -134,9 +154,15 @@ export default async function AdminDashboard() {
     },
   ];
 
+  const siteViewStats = [
+    { title: "Total geral", count: totalWithBaseline, subtitle: "Desde o início" },
+    { title: "Este mês", count: monthWithBaseline, subtitle: format(startMonth, "MMMM yyyy", { locale: ptBR }) },
+    { title: "Hoje", count: dayWithBaseline, subtitle: format(startToday, "dd/MM/yyyy", { locale: ptBR }) },
+  ];
+
   const engagementStats = [
     {
-      title: "Visualizações",
+      title: "Visualizações (notícias)",
       count: totalViews,
       icon: Eye,
       color: "text-blue-600",
@@ -192,11 +218,34 @@ export default async function AdminDashboard() {
         })}
       </div>
 
+      {/* Visualizações reais do site */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Eye className="w-5 h-5 text-gray-700" />
+          <h2 className="text-xl font-bold text-gray-900">Visualizações do site (reais)</h2>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">
+          Page views do site público (exclui painel admin). Cada carregamento de página conta como uma visualização.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {siteViewStats.map((stat) => (
+            <div
+              key={stat.title}
+              className="bg-slate-50 rounded-lg p-4 border border-slate-100"
+            >
+              <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
+              <p className="text-2xl font-bold text-gray-900">{Number(stat.count).toLocaleString("pt-BR")}</p>
+              <p className="text-xs text-gray-500 mt-1">{stat.subtitle}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Estatísticas de Engajamento */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-5 h-5 text-gray-700" />
-          <h2 className="text-xl font-bold text-gray-900">Engajamento</h2>
+          <h2 className="text-xl font-bold text-gray-900">Engajamento (notícias)</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {engagementStats.map((stat) => {
